@@ -8,15 +8,15 @@ import com.skillswap.util.SvgGenerator;
 import java.util.*;
 
 /**
- * Pure Java HTML/CSS UI renderer for SkillSwap.
- * Employs a glassmorphic dark-mode design system with responsive flex/grid layouts,
- * SVG barter cycle visualizers, skill chips, and interactive micro-animations.
+ * Modern editorial & neo-brutalist frontend UI renderer for SkillSwap.
+ * Features high-contrast ink/lime palette, Bricolage Grotesque & DM Sans typography,
+ * interactive barter matchers, inline SVG cycle visualizations, and responsive cards.
  * Zero external template engines or runtime dependencies.
  */
 public class HtmlRenderer {
 
     // =========================================================================
-    // Base Page Layout with CSS Design System
+    // Base Page Layout with Design System
     // =========================================================================
 
     public static String renderPage(String title, String activeNav, Member currentUser, String contentHtml, String flashSuccess, String flashError) {
@@ -27,7 +27,7 @@ public class HtmlRenderer {
         sb.append("<title>").append(SecurityUtil.escapeHtml(title)).append(" | SkillSwap</title>\n");
         sb.append("<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n");
         sb.append("<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n");
-        sb.append("<link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap\" rel=\"stylesheet\">\n");
+        sb.append("<link href=\"https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap\" rel=\"stylesheet\">\n");
         sb.append("<style>\n").append(getCssStyles()).append("\n</style>\n");
         sb.append("</head>\n<body>\n");
 
@@ -68,33 +68,41 @@ public class HtmlRenderer {
         sb.append("<header class=\"navbar\">\n");
         sb.append("  <div class=\"nav-inner\">\n");
         sb.append("    <a href=\"/\" class=\"brand\">\n");
-        sb.append("      <span class=\"brand-icon\">🔄</span>\n");
-        sb.append("      <span class=\"brand-name\">Skill<span class=\"text-gradient\">Swap</span></span>\n");
+        sb.append("      <span class=\"brand-icon\">\n");
+        sb.append("        <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#CDF23A\" stroke-width=\"2.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 9h13l-3-3\"></path><path d=\"M20 15H7l3 3\"></path></svg>\n");
+        sb.append("      </span>\n");
+        sb.append("      <span class=\"brand-name\">SkillSwap</span>\n");
         sb.append("    </a>\n");
 
         sb.append("    <nav class=\"nav-links\">\n");
-        sb.append("      <a href=\"/\" class=\"nav-link ").append("home".equals(activeNav) ? "active" : "").append("\">Home</a>\n");
-        sb.append("      <a href=\"/members\" class=\"nav-link ").append("members".equals(activeNav) ? "active" : "").append("\">Community</a>\n");
-
-        if (currentUser != null) {
-            sb.append("      <a href=\"/swaps\" class=\"nav-link ").append("swaps".equals(activeNav) ? "active" : "").append("\">⚡ Find Swaps</a>\n");
-            sb.append("      <a href=\"/proposals\" class=\"nav-link ").append("proposals".equals(activeNav) ? "active" : "").append("\">🤝 Proposals</a>\n");
-            sb.append("      <a href=\"/profile\" class=\"nav-link ").append("profile".equals(activeNav) ? "active" : "").append("\">👤 My Profile</a>\n");
+        if (currentUser == null) {
+            sb.append("      <a href=\"/\" class=\"nav-link ").append("home".equals(activeNav) ? "active" : "").append("\">Home</a>\n");
+            sb.append("      <a href=\"/#how\" class=\"nav-link\">How it works</a>\n");
+            sb.append("      <a href=\"/#try\" class=\"nav-link\">Try matcher</a>\n");
+            sb.append("      <a href=\"/#why\" class=\"nav-link\">Why it's fair</a>\n");
+            sb.append("      <a href=\"/members\" class=\"nav-link ").append("members".equals(activeNav) ? "active" : "").append("\">Community</a>\n");
+        } else {
+            sb.append("      <a href=\"/swaps\" class=\"nav-link ").append("swaps".equals(activeNav) ? "active" : "").append("\">Dashboard</a>\n");
+            sb.append("      <a href=\"/profile\" class=\"nav-link ").append("profile".equals(activeNav) ? "active" : "").append("\">My Skills</a>\n");
+            sb.append("      <a href=\"/proposals\" class=\"nav-link ").append("proposals".equals(activeNav) ? "active" : "").append("\">Proposals</a>\n");
+            sb.append("      <a href=\"/members\" class=\"nav-link ").append("members".equals(activeNav) ? "active" : "").append("\">Community</a>\n");
         }
         sb.append("    </nav>\n");
 
         sb.append("    <div class=\"nav-actions\">\n");
         if (currentUser != null) {
-            sb.append("      <div class=\"user-pill\">\n");
-            sb.append("        <span class=\"user-avatar\">").append(SecurityUtil.escapeHtml(currentUser.getName().substring(0, 1).toUpperCase())).append("</span>\n");
-            sb.append("        <span class=\"user-name\">").append(SecurityUtil.escapeHtml(currentUser.getName())).append("</span>\n");
-            sb.append("      </div>\n");
+            String initial = currentUser.getName().substring(0, 1).toUpperCase();
+            String avClass = getAvatarClass(currentUser.getName());
+            sb.append("      <a href=\"/profile\" class=\"user-pill\">\n");
+            sb.append("        <span class=\"av ").append(avClass).append("\" style=\"width:32px;height:32px;font-size:13px;\">").append(SecurityUtil.escapeHtml(initial)).append("</span>\n");
+            sb.append("        <span style=\"font-weight:700;\">").append(SecurityUtil.escapeHtml(currentUser.getName())).append("</span>\n");
+            sb.append("      </a>\n");
             sb.append("      <form action=\"/logout\" method=\"POST\" style=\"display:inline;\">\n");
-            sb.append("        <button type=\"submit\" class=\"btn btn-outline btn-sm\">Sign Out</button>\n");
+            sb.append("        <button type=\"submit\" class=\"btn btn-ghost\" style=\"min-height:38px;padding:0 16px;font-size:14px;\">Sign Out</button>\n");
             sb.append("      </form>\n");
         } else {
-            sb.append("      <a href=\"/login\" class=\"btn btn-ghost btn-sm\">Log In</a>\n");
-            sb.append("      <a href=\"/signup\" class=\"btn btn-primary btn-sm\">Sign Up</a>\n");
+            sb.append("      <a href=\"/login\" class=\"btn btn-ghost\" style=\"min-height:40px;padding:0 18px;\">Log In</a>\n");
+            sb.append("      <a href=\"/signup\" class=\"btn btn-lime\" style=\"min-height:40px;padding:0 20px;\">Join Free</a>\n");
         }
         sb.append("    </div>\n");
         sb.append("  </div>\n");
@@ -106,8 +114,16 @@ public class HtmlRenderer {
         return """
         <footer class="footer">
           <div class="footer-inner">
-            <p><strong>SkillSwap</strong> &mdash; A Money-Free Skill Barter Marketplace.</p>
-            <p class="text-muted">Exchange knowledge directly or through algorithmic 3-way & 4-way barter cycles.</p>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <span style="width:32px;height:32px;border-radius:10px;background:#0D1F1A;display:inline-flex;align-items:center;justify-content:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CDF23A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h13l-3-3"></path><path d="M20 15H7l3 3"></path></svg>
+              </span>
+              <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;">SkillSwap</span>
+              <span style="color:#4A5B55;">· a money-free skill barter for students</span>
+            </div>
+            <div style="color:#4A5B55;font-size:14px;">
+              Pure Java OOP Engine · Direct & Cyclic Barter Discovery
+            </div>
           </div>
         </footer>
         """;
@@ -120,26 +136,17 @@ public class HtmlRenderer {
     private static String getCssStyles() {
         return """
         :root {
-          --bg-base: #090d16;
-          --bg-surface: #0f172a;
-          --bg-card: rgba(30, 41, 59, 0.72);
-          --bg-card-hover: rgba(39, 53, 77, 0.82);
-          --border-color: rgba(255, 255, 255, 0.08);
-          --border-highlight: rgba(99, 102, 241, 0.35);
-          --primary: #6366f1;
-          --primary-hover: #4f46e5;
-          --accent: #8b5cf6;
-          --success: #10b981;
-          --warning: #f59e0b;
-          --danger: #ef4444;
-          --text-main: #f8fafc;
-          --text-muted: #94a3b8;
-          --text-dim: #64748b;
-          --radius-sm: 8px;
-          --radius-md: 14px;
-          --radius-lg: 20px;
-          --shadow-subtle: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
-          --shadow-glow: 0 0 25px -5px rgba(99, 102, 241, 0.3);
+          --bg-page: #F1F4EF;
+          --color-ink: #0D1F1A;
+          --color-lime: #CDF23A;
+          --color-lavender: #C9B8FF;
+          --color-coral: #F7A58E;
+          --color-blue: #3A3FD8;
+          --color-sky: #8FD8F2;
+          --color-yellow: #FBE08A;
+          --color-muted: #33463F;
+          --color-dim: #4A5B55;
+          --border-ink: 2px solid #0D1F1A;
         }
 
         * {
@@ -149,19 +156,22 @@ public class HtmlRenderer {
         }
 
         body {
-          font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-          background-color: var(--bg-base);
-          background-image: 
-            radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-            radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
-            radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.08) 0px, transparent 60%);
-          background-attachment: fixed;
-          color: var(--text-main);
+          margin: 0;
+          background: var(--bg-page);
+          color: var(--color-ink);
+          font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+          -webkit-font-smoothing: antialiased;
+          line-height: 1.5;
           min-height: 100vh;
           display: flex;
           flex-direction: column;
-          line-height: 1.6;
-          -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+          font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif;
+          margin: 0;
+          letter-spacing: -0.02em;
+          color: var(--color-ink);
         }
 
         a {
@@ -169,12 +179,17 @@ public class HtmlRenderer {
           text-decoration: none;
         }
 
+        button {
+          font-family: inherit;
+          cursor: pointer;
+        }
+
         .main-container {
           flex: 1;
           width: 100%;
-          max-width: 1200px;
+          max-width: 1240px;
           margin: 0 auto;
-          padding: 2.5rem 1.5rem;
+          padding: 32px 24px 64px;
         }
 
         /* Navbar */
@@ -182,97 +197,72 @@ public class HtmlRenderer {
           position: sticky;
           top: 0;
           z-index: 100;
-          backdrop-filter: blur(16px);
-          background: rgba(15, 23, 42, 0.85);
-          border-bottom: 1px solid var(--border-color);
+          background: rgba(241, 244, 239, 0.94);
+          backdrop-filter: blur(12px);
+          border-bottom: var(--border-ink);
         }
         .nav-inner {
-          max-width: 1200px;
+          max-width: 1240px;
           margin: 0 auto;
-          padding: 0.9rem 1.5rem;
+          padding: 16px 24px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          gap: 1.5rem;
+          flex-wrap: wrap;
+          gap: 16px;
         }
         .brand {
           display: flex;
           align-items: center;
-          gap: 0.6rem;
-          font-size: 1.35rem;
-          font-weight: 800;
-          letter-spacing: -0.02em;
+          gap: 10px;
         }
         .brand-icon {
-          font-size: 1.5rem;
+          width: 38px;
+          height: 38px;
+          border-radius: 12px;
+          background: var(--color-ink);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
-        .text-gradient {
-          background: linear-gradient(135deg, #818cf8, #34d399);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        .badge-tag {
-          font-size: 0.68rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          background: rgba(99, 102, 241, 0.18);
-          color: #a5b4fc;
-          padding: 0.2rem 0.55rem;
-          border-radius: 9999px;
-          border: 1px solid rgba(99, 102, 241, 0.3);
+        .brand-name {
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-weight: 800;
+          font-size: 24px;
+          letter-spacing: -0.03em;
+          color: var(--color-ink);
         }
         .nav-links {
           display: flex;
           align-items: center;
-          gap: 1rem;
+          gap: 6px;
+          flex-wrap: wrap;
         }
         .nav-link {
-          font-size: 0.92rem;
-          font-weight: 600;
-          color: var(--text-muted);
-          padding: 0.5rem 0.85rem;
-          border-radius: var(--radius-sm);
-          transition: all 0.2s ease;
+          padding: 8px 14px;
+          border-radius: 999px;
+          font-weight: 500;
+          font-size: 15px;
+          color: var(--color-ink);
+          transition: background .15s;
         }
-        .nav-link:hover {
-          color: var(--text-main);
-          background: rgba(255, 255, 255, 0.05);
-        }
-        .nav-link.active {
-          color: #ffffff;
-          background: rgba(99, 102, 241, 0.22);
-          border: 1px solid rgba(99, 102, 241, 0.4);
+        .nav-link:hover, .nav-link.active {
+          background: #E1E8DF;
         }
         .nav-actions {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 12px;
         }
         .user-pill {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.06);
-          padding: 0.35rem 0.75rem 0.35rem 0.4rem;
-          border-radius: 9999px;
-          border: 1px solid var(--border-color);
-        }
-        .user-avatar {
-          width: 26px;
-          height: 26px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--primary), var(--accent));
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.8rem;
-          font-weight: 800;
-          color: #fff;
-        }
-        .user-name {
-          font-size: 0.85rem;
-          font-weight: 600;
+          gap: 8px;
+          padding: 4px 12px 4px 4px;
+          border: 2px solid var(--color-ink);
+          border-radius: 999px;
+          background: #fff;
+          font-size: 14px;
         }
 
         /* Buttons */
@@ -280,154 +270,139 @@ public class HtmlRenderer {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          gap: 0.5rem;
-          font-family: inherit;
-          font-weight: 600;
-          border-radius: var(--radius-sm);
-          cursor: pointer;
-          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-          border: none;
-          text-decoration: none;
-          white-space: nowrap;
+          gap: 8px;
+          min-height: 46px;
+          padding: 0 22px;
+          border-radius: 999px;
+          font-weight: 700;
+          font-size: 15px;
+          border: 2px solid var(--color-ink);
+          transition: transform .15s, background .15s, box-shadow .15s;
         }
         .btn:hover {
-          transform: translateY(-1px);
+          transform: translateY(-2px);
         }
         .btn-sm {
-          padding: 0.45rem 0.9rem;
-          font-size: 0.85rem;
+          min-height: 36px;
+          padding: 0 16px;
+          font-size: 13px;
         }
         .btn-md {
-          padding: 0.65rem 1.3rem;
-          font-size: 0.95rem;
+          min-height: 44px;
+          padding: 0 20px;
+          font-size: 15px;
         }
         .btn-lg {
-          padding: 0.85rem 1.75rem;
-          font-size: 1.05rem;
-          border-radius: var(--radius-md);
+          min-height: 52px;
+          padding: 0 28px;
+          font-size: 17px;
         }
-        .btn-primary {
-          background: linear-gradient(135deg, var(--primary), var(--accent));
-          color: #ffffff;
-          box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.38);
-        }
-        .btn-primary:hover {
-          box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.5);
-        }
-        .btn-success {
-          background: linear-gradient(135deg, #059669, #10b981);
-          color: #ffffff;
-          box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.38);
-        }
-        .btn-danger {
-          background: linear-gradient(135deg, #dc2626, #ef4444);
-          color: #ffffff;
-        }
-        .btn-outline {
-          background: transparent;
-          color: var(--text-main);
-          border: 1px solid var(--border-color);
-        }
-        .btn-outline:hover {
-          background: rgba(255, 255, 255, 0.08);
-          border-color: rgba(255, 255, 255, 0.2);
-        }
-        .btn-ghost {
-          background: transparent;
-          color: var(--text-muted);
-        }
-        .btn-ghost:hover {
-          color: var(--text-main);
-          background: rgba(255, 255, 255, 0.06);
-        }
+        .btn-lime { background: var(--color-lime); color: var(--color-ink); }
+        .btn-ink { background: var(--color-ink); color: #fff; }
+        .btn-ghost { background: #fff; color: var(--color-ink); }
+        .btn-outline { background: transparent; color: var(--color-ink); }
 
-        /* Glass Cards */
-        .glass-card {
-          background: var(--bg-card);
-          backdrop-filter: blur(12px);
-          border: 1px solid var(--border-color);
-          border-radius: var(--radius-md);
-          padding: 1.75rem;
-          box-shadow: var(--shadow-subtle);
-          transition: all 0.25s ease;
-        }
-        .glass-card:hover {
-          border-color: rgba(255, 255, 255, 0.14);
-        }
-
-        /* Alerts */
-        .alert {
-          padding: 1rem 1.35rem;
-          border-radius: var(--radius-sm);
-          margin-bottom: 1.5rem;
-          font-weight: 500;
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          animation: slideDown 0.3s ease-out;
-        }
-        .alert-success {
-          background: rgba(16, 185, 129, 0.15);
-          color: #6ee7b7;
-          border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-        .alert-danger {
-          background: rgba(239, 68, 68, 0.15);
-          color: #fca5a5;
-          border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        /* Badges & Chips */
-        .badge {
+        /* Pills and Tags */
+        .pill {
           display: inline-flex;
           align-items: center;
-          gap: 0.35rem;
-          font-size: 0.78rem;
-          font-weight: 600;
-          padding: 0.25rem 0.65rem;
-          border-radius: 9999px;
-          white-space: nowrap;
+          padding: 4px 12px;
+          border-radius: 999px;
+          font-size: 14px;
+          font-weight: 700;
+          background: #E1E8DF;
+          color: var(--color-ink);
         }
-        .skill-chip {
+        .pill.lm { background: var(--color-lime); color: var(--color-ink); }
+        .pill.dk { background: #1d3329; color: #E8EFE9; border: 1px solid #3b5148; }
+
+        /* Avatars */
+        .av {
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
           display: inline-flex;
           align-items: center;
-          gap: 0.5rem;
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid var(--border-color);
-          border-radius: var(--radius-sm);
-          padding: 0.4rem 0.75rem;
-          font-size: 0.88rem;
-          font-weight: 500;
-          transition: all 0.2s ease;
+          justify-content: center;
+          font-weight: 800;
+          font-size: 15px;
+          color: var(--color-ink);
+          flex: none;
+          border: 2px solid var(--color-ink);
+          font-family: 'Bricolage Grotesque', sans-serif;
         }
-        .skill-chip:hover {
-          border-color: rgba(255, 255, 255, 0.2);
-          background: rgba(255, 255, 255, 0.08);
+        .av-Asha { background: var(--color-lime); }
+        .av-Ravi { background: var(--color-lavender); }
+        .av-Meena { background: var(--color-coral); }
+        .av-Kabir { background: var(--color-sky); }
+        .av-Neha { background: var(--color-yellow); }
+
+        /* Statuses */
+        .st {
+          display: inline-flex;
+          align-items: center;
+          padding: 4px 12px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 700;
+          border: 2px solid var(--color-ink);
+        }
+        .st.yes { background: var(--color-lime); color: var(--color-ink); }
+        .st.wait { background: var(--color-yellow); color: var(--color-ink); }
+        .st.no { background: var(--color-coral); color: var(--color-ink); }
+
+        /* Cards */
+        .card, .glass-card {
+          background: #fff;
+          border: 2px solid var(--color-ink);
+          border-radius: 24px;
+          box-sizing: border-box;
+          transition: background .2s, transform .15s;
+        }
+        .card-lift:hover {
+          transform: translateY(-3px);
+          box-shadow: 6px 6px 0 var(--color-ink);
+        }
+        .feat:hover {
+          background: var(--color-lime);
         }
 
-        /* Grid System */
+        /* Grids */
         .grid-2 {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1.5rem;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 24px;
         }
         .grid-3 {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.5rem;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 24px;
         }
-        .grid-4 {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 1.25rem;
+
+        /* Tabs */
+        .tab-bar {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
         }
-        @media (max-width: 900px) {
-          .grid-2, .grid-3, .grid-4 {
-            grid-template-columns: 1fr;
-          }
-          .nav-links {
-            display: none;
-          }
+        .tab {
+          min-height: 44px;
+          padding: 0 20px;
+          border-radius: 999px;
+          border: 2px solid #3b5148;
+          background: transparent;
+          color: #E8EFE9;
+          font-weight: 700;
+          font-size: 15px;
+          transition: border-color .15s, background .15s;
+        }
+        .tab:hover {
+          border-color: var(--color-lime);
+        }
+        .tab.on {
+          background: var(--color-lime);
+          color: var(--color-ink);
+          border-color: var(--color-lime);
         }
 
         /* Forms */
@@ -436,81 +411,87 @@ public class HtmlRenderer {
         }
         .form-label {
           display: block;
-          font-size: 0.85rem;
-          font-weight: 600;
-          color: var(--text-muted);
+          font-size: 0.88rem;
+          font-weight: 700;
+          color: var(--color-dim);
           margin-bottom: 0.4rem;
         }
         .form-control {
           width: 100%;
-          background: rgba(15, 23, 42, 0.75);
-          border: 1px solid var(--border-color);
-          border-radius: var(--radius-sm);
-          padding: 0.65rem 0.9rem;
-          color: #ffffff;
+          background: #fff;
+          border: 2px solid var(--color-ink);
+          border-radius: 12px;
+          padding: 0.75rem 1rem;
+          color: var(--color-ink);
           font-family: inherit;
-          font-size: 0.95rem;
-          transition: border-color 0.2s ease;
+          font-size: 1rem;
+          transition: outline .15s;
         }
         .form-control:focus {
-          outline: none;
-          border-color: var(--primary);
-          box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+          outline: 3px solid var(--color-blue);
+          outline-offset: 1px;
         }
 
-        /* SVG swap diagram container */
-        .swap-cycle-card {
-          background: var(--bg-card);
-          border: 1px solid var(--border-color);
-          border-radius: var(--radius-lg);
-          padding: 1.75rem;
-          margin-bottom: 2rem;
-          transition: all 0.25s ease;
+        /* Star Rating Widget */
+        .star {
+          width: 42px;
+          height: 42px;
+          border: 0;
+          background: transparent;
+          padding: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
         }
-        .swap-cycle-card:hover {
-          border-color: var(--border-highlight);
-          box-shadow: var(--shadow-glow);
+        .star svg {
+          fill: #fff;
+          stroke: var(--color-ink);
+          stroke-width: 2;
+          transition: fill .15s, transform .1s;
         }
-        .swap-cycle-svg {
-          width: 100%;
-          max-height: 400px;
-          display: block;
-          margin: 1rem auto;
+        .star.on svg {
+          fill: var(--color-lime);
+        }
+        .star:hover svg {
+          fill: var(--color-lime);
+          transform: scale(1.15);
         }
 
-        /* Hero section */
-        .hero {
-          text-align: center;
-          padding: 4rem 1rem 3rem 1rem;
+        /* Alerts */
+        .alert {
+          border: 2px solid var(--color-ink);
+          border-radius: 18px;
+          padding: 1rem 1.25rem;
+          margin-bottom: 1.5rem;
+          font-weight: 600;
+          font-size: 0.95rem;
+          display: flex;
+          align-items: center;
+          gap: 10px;
         }
-        .hero h1 {
-          font-size: 3.2rem;
-          font-weight: 800;
-          letter-spacing: -0.03em;
-          margin-bottom: 1.25rem;
-          line-height: 1.15;
-        }
-        .hero p {
-          font-size: 1.2rem;
-          color: var(--text-muted);
-          max-width: 680px;
-          margin: 0 auto 2.5rem auto;
-        }
+        .alert-success { background: #DCFCE7; color: var(--color-ink); }
+        .alert-danger { background: #FEE2E2; color: var(--color-ink); }
 
         /* Footer */
         .footer {
-          margin-top: auto;
-          border-top: 1px solid var(--border-color);
-          background: rgba(15, 23, 42, 0.6);
-          padding: 2rem 1.5rem;
-          text-align: center;
-          font-size: 0.85rem;
-          color: var(--text-dim);
+          border-top: 2px solid var(--color-ink);
+          background: #fff;
+          padding: 32px 24px;
+        }
+        .footer-inner {
+          max-width: 1240px;
+          margin: 0 auto;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 16px;
         }
 
-        @keyframes slideDown {
-          from { opacity: 0; transform: translateY(-8px); }
-          to { opacity: 1; transform: translateY(0); }
+        a:focus-visible, button:focus-visible {
+          outline: 3px solid var(--color-blue);
+          outline-offset: 3px;
         }
         """;
     }
@@ -522,51 +503,349 @@ public class HtmlRenderer {
     public static String renderHome(Member currentUser, int memberCount, int swapOpportunitiesCount, List<Member> featuredMembers) {
         StringBuilder sb = new StringBuilder();
 
-        // Hero
-        sb.append("<section class=\"hero\">\n");
-        sb.append("  <span class=\"badge-tag\" style=\"margin-bottom:1rem;display:inline-block;\">💸 Zero-Money Barter Marketplace</span>\n");
-        sb.append("  <h1>Trade Skills, Build Mastery.<br><span class=\"text-gradient\">Direct & Cyclic Peer Barter.</span></h1>\n");
-        sb.append("  <p>Exchange knowledge directly or through algorithmic 3-way & 4-way cycles. Asha learns Excel from Ravi, Ravi learns Photography from Meena, Meena learns Guitar from Asha.</p>\n");
+        // Hero Section
+        sb.append("<section style=\"padding: 32px 0 64px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center;\">\n");
+        sb.append("  <div style=\"flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px;\">\n");
+        sb.append("    <span class=\"pill lm\" style=\"border: 2px solid #0D1F1A; align-self: flex-start;\">No money. Just skills.</span>\n");
+        sb.append("    <h1 style=\"font-size: clamp(2.8rem, 5.5vw, 4.8rem); line-height: 0.98; font-weight: 800;\">Trade what you know for what you want to learn.</h1>\n");
+        sb.append("    <p style=\"font-size: 1.2rem; line-height: 1.55; color: #33463F; max-width: 560px;\">\n");
+        sb.append("      Teach guitar, learn Excel. When direct one-to-one barter doesn't align, SkillSwap's graph engine discovers circular 3-way & 4-way exchanges where everyone teaches one peer and learns from another.\n");
+        sb.append("    </p>\n");
 
-        sb.append("  <div style=\"display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;\">\n");
+        sb.append("    <div style=\"display: flex; flex-wrap: wrap; gap: 14px;\">\n");
         if (currentUser == null) {
-            sb.append("    <a href=\"/signup\" class=\"btn btn-primary btn-lg\">Get Started Free</a>\n");
-            sb.append("    <a href=\"/login\" class=\"btn btn-outline btn-lg\">Member Log In</a>\n");
+            sb.append("      <a href=\"/signup\" class=\"btn btn-ink btn-lg\">Start Swapping Free</a>\n");
+            sb.append("      <a href=\"#try\" class=\"btn btn-ghost btn-lg\">See Live Matcher</a>\n");
         } else {
-            sb.append("    <a href=\"/swaps\" class=\"btn btn-primary btn-lg\">⚡ Discover My Swaps</a>\n");
-            sb.append("    <a href=\"/profile\" class=\"btn btn-outline btn-lg\">Edit My Skills</a>\n");
+            sb.append("      <a href=\"/swaps\" class=\"btn btn-ink btn-lg\">⚡ Open My Dashboard</a>\n");
+            sb.append("      <a href=\"/profile\" class=\"btn btn-ghost btn-lg\">Edit My Skills</a>\n");
         }
+        sb.append("    </div>\n");
+        sb.append("  </div>\n");
+
+        // Hero Visual Card (Angled with neo-brutalist shadow)
+        sb.append("  <div style=\"flex: 1 1 420px; min-width: 0; display: flex; justify-content: center;\">\n");
+        sb.append("    <div class=\"card\" style=\"width: 100%; max-width: 480px; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: 10px 10px 0 #0D1F1A; transform: rotate(1.5deg);\">\n");
+        sb.append("      <div style=\"display: flex; justify-content: space-between; align-items: center; gap: 12px;\">\n");
+        sb.append("        <h3 style=\"font-size: 22px; font-weight: 800;\">3-way swap found</h3>\n");
+        sb.append("        <span class=\"pill lm\">Everyone gets a match</span>\n");
+        sb.append("      </div>\n");
+        sb.append("      <div style=\"display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.4;\">\n");
+        sb.append("        <span class=\"av av-Asha\">A</span><span><b>Asha</b> learns <span class=\"pill lm\">Excel</span> from <b>Ravi</b></span>\n");
+        sb.append("      </div>\n");
+        sb.append("      <div style=\"display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.4;\">\n");
+        sb.append("        <span class=\"av av-Ravi\">R</span><span><b>Ravi</b> learns <span class=\"pill lm\">Photography</span> from <b>Meena</b></span>\n");
+        sb.append("      </div>\n");
+        sb.append("      <div style=\"display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.4;\">\n");
+        sb.append("        <span class=\"av av-Meena\">M</span><span><b>Meena</b> learns <span class=\"pill lm\">Guitar</span> from <b>Asha</b></span>\n");
+        sb.append("      </div>\n");
+        sb.append("      <div style=\"display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; border-top: 2px dashed #0D1F1A;\">\n");
+        sb.append("        <span style=\"font-size: 14px; color: #4A5B55;\">Status: <b>Mutual Consensus Pending</b></span>\n");
+        sb.append("        <a href=\"/login\" class=\"btn btn-ink btn-sm\">Test Flow</a>\n");
+        sb.append("      </div>\n");
+        sb.append("    </div>\n");
         sb.append("  </div>\n");
         sb.append("</section>\n");
 
-        // Feature Highlights
-        sb.append("<div class=\"grid-3\" style=\"margin-bottom: 3rem;\">\n");
-        sb.append("""
-          <div class="glass-card">
-            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔄</div>
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Multi-Way Cyclic Swaps</h3>
-            <p class="text-muted" style="font-size: 0.9rem;">
-              Direct barter often stalls because A has what B wants, but B doesn't have what A wants. Our DFS cycle engine connects 3-way and 4-way circular exchanges.
-            </p>
-          </div>
-          <div class="glass-card">
-            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🎯</div>
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Level Compatibility</h3>
-            <p class="text-muted" style="font-size: 0.9rem;">
-              Enforces pedagogical rules: Beginners require Intermediate or Advanced mentors, while Advanced learners match with senior mentors.
-            </p>
-          </div>
-          <div class="glass-card">
-            <div style="font-size: 2rem; margin-bottom: 0.75rem;">🔒</div>
-            <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Fairness & Privacy Lock</h3>
-            <p class="text-muted" style="font-size: 0.9rem;">
-              Members in an active proposal are locked to prevent overcommitting. Contacts are revealed only after 100% mutual consensus.
-            </p>
-          </div>
-        """);
-        sb.append("</div>\n");
+        // How it Works (#how)
+        sb.append("<section id=\"how\" style=\"padding: 48px 0 64px;\">\n");
+        sb.append("  <div style=\"margin-bottom: 32px;\">\n");
+        sb.append("    <span class=\"pill lm\" style=\"margin-bottom: 10px;\">Algorithmic Barter</span>\n");
+        sb.append("    <h2 style=\"font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;\">How a 3-way swap solves the double coincidence of wants.</h2>\n");
+        sb.append("  </div>\n");
+
+        sb.append("  <div class=\"grid-3\">\n");
+        sb.append("    <div class=\"card card-lift\" style=\"padding: 28px;\">\n");
+        sb.append("      <div style=\"font-size: 2rem; margin-bottom: 12px;\">⚠️</div>\n");
+        sb.append("      <h3 style=\"font-size: 20px; font-weight: 800; margin-bottom: 8px;\">1. Direct trade stalls</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">Asha wants Excel and teaches Guitar. Ravi teaches Excel but wants Photography. Direct swap fails because Ravi doesn't need Guitar.</p>\n");
+        sb.append("    </div>\n");
+
+        sb.append("    <div class=\"card card-lift\" style=\"padding: 28px;\">\n");
+        sb.append("      <div style=\"font-size: 2rem; margin-bottom: 12px;\">🔄</div>\n");
+        sb.append("      <h3 style=\"font-size: 20px; font-weight: 800; margin-bottom: 8px;\">2. Circle discovered</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">SkillSwap's DFS cycle engine discovers Meena: she teaches Photography to Ravi and wants to learn Guitar from Asha. The circular loop is complete!</p>\n");
+        sb.append("    </div>\n");
+
+        sb.append("    <div class=\"card card-lift\" style=\"padding: 28px;\">\n");
+        sb.append("      <div style=\"font-size: 2rem; margin-bottom: 12px;\">✨</div>\n");
+        sb.append("      <h3 style=\"font-size: 20px; font-weight: 800; margin-bottom: 8px;\">3. Everyone learns</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">All three students accept the proposal. Contacts are unlocked, study sessions are scheduled, and peer reviews rank future pairings.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("  </div>\n");
+        sb.append("</section>\n");
+
+        // Interactive Live Matcher (#try)
+        sb.append(renderInteractiveMatcherSection());
+
+        // Why It's Fair (#why)
+        sb.append("<section id=\"why\" style=\"padding: 64px 0;\">\n");
+        sb.append("  <h2 style=\"font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; max-width: 800px; margin-bottom: 32px;\">Built so nobody gets left holding the bag.</h2>\n");
+        sb.append("  <div class=\"grid-3\">\n");
+        sb.append("    <div class=\"card feat\" style=\"padding: 28px;\">\n");
+        sb.append("      <h3 style=\"font-size: 22px; font-weight: 800; margin-bottom: 8px;\">Level-aware</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; line-height: 1.55;\">Pedagogical integrity: a beginner is only matched with mentors at intermediate or advanced skill levels.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("    <div class=\"card feat\" style=\"padding: 28px;\">\n");
+        sb.append("      <h3 style=\"font-size: 22px; font-weight: 800; margin-bottom: 8px;\">All or nothing</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; line-height: 1.55;\">A circle only activates when every participant accepts. Any single decline cancels the proposal and unlocks everyone.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("    <div class=\"card feat\" style=\"padding: 28px;\">\n");
+        sb.append("      <h3 style=\"font-size: 22px; font-weight: 800; margin-bottom: 8px;\">Private until it's real</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; line-height: 1.55;\">Contact details and schedules stay strictly confidential until 100% of cycle members confirm.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("    <div class=\"card feat\" style=\"padding: 28px;\">\n");
+        sb.append("      <h3 style=\"font-size: 22px; font-weight: 800; margin-bottom: 8px;\">Peer rated</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; line-height: 1.55;\">Following each swap lesson, members review their teachers with 1-5 stars. High ratings boost match ranking.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("    <div class=\"card feat\" style=\"padding: 28px;\">\n");
+        sb.append("      <h3 style=\"font-size: 22px; font-weight: 800; margin-bottom: 8px;\">Concurrency Lock</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; line-height: 1.55;\">Participants in an active trade are locked to prevent overcommitting or double-booking barter slots.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("    <div class=\"card feat\" style=\"padding: 28px;\">\n");
+        sb.append("      <h3 style=\"font-size: 22px; font-weight: 800; margin-bottom: 8px;\">Almost-Matches</h3>\n");
+        sb.append("      <p style=\"font-size: 15px; line-height: 1.55;\">Smart suggestions detect skills that, if added to your desired list, will instantly unlock new barter exchanges.</p>\n");
+        sb.append("    </div>\n");
+        sb.append("  </div>\n");
+        sb.append("</section>\n");
+
+        // Bottom CTA Banner
+        sb.append("<section style=\"padding: 32px 0 64px;\">\n");
+        sb.append("  <div class=\"card\" style=\"background: var(--color-lime); padding: 56px 32px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; box-shadow: 8px 8px 0 #0D1F1A;\">\n");
+        sb.append("    <h2 style=\"font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; max-width: 680px;\">Your next skill is one swap away.</h2>\n");
+        sb.append("    <p style=\"max-width: 500px; font-size: 17px; color: #1D3329;\">Join over a dozen college students trading coding, music, design, and languages without spending a dime.</p>\n");
+        sb.append("    <a href=\"/signup\" class=\"btn btn-ink btn-lg\">Create Your Profile</a>\n");
+        sb.append("  </div>\n");
+        sb.append("</section>\n");
 
         return sb.toString();
+    }
+
+    private static String renderInteractiveMatcherSection() {
+        return """
+        <section id="try" style="margin: 40px 0; padding: 48px 32px; background: #0D1F1A; color: #fff; border-radius: 28px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px;">
+          <div>
+            <span class="pill lm" style="margin-bottom: 12px; display: inline-flex;">Interactive Matcher Sandbox</span>
+            <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; color: #fff;">See live cyclic swaps for any student.</h2>
+            <p style="color: #B9C8BF; max-width: 600px; margin-top: 8px; font-size: 16px;">
+              Pick a student to inspect their taught and desired skills, and discover how our DFS engine discovers circular barter trades.
+            </p>
+          </div>
+
+          <!-- Student Tab Bar -->
+          <div class="tab-bar" id="studentTabs">
+            <button class="tab on" onclick="selectStudent('Asha')">Asha</button>
+            <button class="tab" onclick="selectStudent('Ravi')">Ravi</button>
+            <button class="tab" onclick="selectStudent('Meena')">Meena</button>
+            <button class="tab" onclick="selectStudent('Kabir')">Kabir</button>
+            <button class="tab" onclick="selectStudent('Neha')">Neha</button>
+          </div>
+
+          <!-- Student Skill Overview Panel -->
+          <div style="background: rgba(255,255,255,0.06); border: 1px solid #3b5148; border-radius: 20px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center;">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <span style="font-size:13px; font-weight:700; color:#CDF23A;">CAN TEACH</span>
+              <div id="teachSkills" style="display:flex; flex-wrap:wrap; gap:8px;">
+                <span class="pill lm">Guitar</span><span class="pill lm">Figma</span>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              <span style="font-size:13px; font-weight:700; color:#C9B8FF;">WANTS TO LEARN</span>
+              <div id="wantSkills" style="display:flex; flex-wrap:wrap; gap:8px;">
+                <span class="pill" style="background:#fff; color:#0D1F1A;">Excel</span><span class="pill" style="background:#fff; color:#0D1F1A;">Python</span>
+              </div>
+            </div>
+            <div>
+              <a id="loginStudentBtn" href="/login" class="btn btn-lime btn-sm">Log in as Asha</a>
+            </div>
+          </div>
+
+          <!-- Discovered Barter Cycles for Chosen Student -->
+          <div id="cycleContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+            <!-- Rendered via JS below -->
+          </div>
+        </section>
+
+        <script>
+        const studentData = {
+          'Asha': {
+            teaches: ['Guitar', 'Figma'],
+            wants: ['Excel', 'Python'],
+            cycles: [
+              {
+                rank: 1,
+                label: '3-way swap',
+                badgeCls: 'lm',
+                members: [
+                  { name: 'Asha', initial: 'A', av: 'av-Asha' },
+                  { name: 'Ravi', initial: 'R', av: 'av-Ravi' },
+                  { name: 'Meena', initial: 'M', av: 'av-Meena' }
+                ],
+                links: [
+                  { learner: 'Asha', skill: 'Excel', teacher: 'Ravi' },
+                  { learner: 'Ravi', skill: 'Photography', teacher: 'Meena' },
+                  { learner: 'Meena', skill: 'Guitar', teacher: 'Asha' }
+                ]
+              },
+              {
+                rank: 2,
+                label: 'Direct swap',
+                badgeCls: 'lm',
+                members: [
+                  { name: 'Asha', initial: 'A', av: 'av-Asha' },
+                  { name: 'Kabir', initial: 'K', av: 'av-Kabir' }
+                ],
+                links: [
+                  { learner: 'Asha', skill: 'Python', teacher: 'Kabir' },
+                  { learner: 'Kabir', skill: 'Figma', teacher: 'Asha' }
+                ]
+              }
+            ]
+          },
+          'Ravi': {
+            teaches: ['Excel', 'Data Analysis'],
+            wants: ['Photography', 'Guitar'],
+            cycles: [
+              {
+                rank: 1,
+                label: '3-way swap',
+                badgeCls: 'lm',
+                members: [
+                  { name: 'Ravi', initial: 'R', av: 'av-Ravi' },
+                  { name: 'Meena', initial: 'M', av: 'av-Meena' },
+                  { name: 'Asha', initial: 'A', av: 'av-Asha' }
+                ],
+                links: [
+                  { learner: 'Ravi', skill: 'Photography', teacher: 'Meena' },
+                  { learner: 'Meena', skill: 'Guitar', teacher: 'Asha' },
+                  { learner: 'Asha', skill: 'Excel', teacher: 'Ravi' }
+                ]
+              }
+            ]
+          },
+          'Meena': {
+            teaches: ['Photography', 'French'],
+            wants: ['Guitar', 'Chess'],
+            cycles: [
+              {
+                rank: 1,
+                label: '3-way swap',
+                badgeCls: 'lm',
+                members: [
+                  { name: 'Meena', initial: 'M', av: 'av-Meena' },
+                  { name: 'Asha', initial: 'A', av: 'av-Asha' },
+                  { name: 'Ravi', initial: 'R', av: 'av-Ravi' }
+                ],
+                links: [
+                  { learner: 'Meena', skill: 'Guitar', teacher: 'Asha' },
+                  { learner: 'Asha', skill: 'Excel', teacher: 'Ravi' },
+                  { learner: 'Ravi', skill: 'Photography', teacher: 'Meena' }
+                ]
+              }
+            ]
+          },
+          'Kabir': {
+            teaches: ['Python', 'Chess'],
+            wants: ['Figma', 'French'],
+            cycles: [
+              {
+                rank: 1,
+                label: 'Direct swap',
+                badgeCls: 'lm',
+                members: [
+                  { name: 'Kabir', initial: 'K', av: 'av-Kabir' },
+                  { name: 'Asha', initial: 'A', av: 'av-Asha' }
+                ],
+                links: [
+                  { learner: 'Kabir', skill: 'Figma', teacher: 'Asha' },
+                  { learner: 'Asha', skill: 'Python', teacher: 'Kabir' }
+                ]
+              }
+            ]
+          },
+          'Neha': {
+            teaches: ['Calculus', 'French'],
+            wants: ['Photography', 'Python'],
+            cycles: [
+              {
+                rank: 1,
+                label: '3-way swap',
+                badgeCls: 'lm',
+                members: [
+                  { name: 'Neha', initial: 'N', av: 'av-Neha' },
+                  { name: 'Meena', initial: 'M', av: 'av-Meena' },
+                  { name: 'Kabir', initial: 'K', av: 'av-Kabir' }
+                ],
+                links: [
+                  { learner: 'Neha', skill: 'Photography', teacher: 'Meena' },
+                  { learner: 'Meena', skill: 'French', teacher: 'Neha' },
+                  { learner: 'Kabir', skill: 'French', teacher: 'Neha' }
+                ]
+              }
+            ]
+          }
+        };
+
+        function selectStudent(name) {
+          const data = studentData[name];
+          if (!data) return;
+
+          // update tabs
+          document.querySelectorAll('#studentTabs .tab').forEach(b => {
+            b.classList.toggle('on', b.textContent.trim() === name);
+          });
+
+          // update skill pills
+          document.getElementById('teachSkills').innerHTML = data.teaches.map(s => `<span class="pill lm">${s}</span>`).join('');
+          document.getElementById('wantSkills').innerHTML = data.wants.map(s => `<span class="pill" style="background:#fff;color:#0D1F1A;">${s}</span>`).join('');
+          document.getElementById('loginStudentBtn').textContent = 'Log in as ' + name;
+
+          // update cycle cards
+          const container = document.getElementById('cycleContainer');
+          if (data.cycles.length === 0) {
+            container.innerHTML = '<p style="color:#B9C8BF;font-size:16px;">No cycle currently open. Add another desired skill to unlock fresh matches.</p>';
+            return;
+          }
+
+          container.innerHTML = data.cycles.map(c => {
+            const memberRing = c.members.map((m, idx) => `
+              <span style="display:inline-flex;align-items:center;gap:6px;">
+                <span class="av ${m.av}">${m.initial}</span>
+                <b style="font-size:15px;color:#0D1F1A;">${m.name}</b>
+                ${idx < c.members.length - 1 ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A3FD8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="M13 6l6 6-6 6"></path></svg>` : ''}
+              </span>
+            `).join('') + (c.members.length > 2 ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A3FD8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-3-6.2"></path><path d="M20 4v5h-5"></path></svg>` : '');
+
+            const linkList = c.links.map(l => `
+              <div style="font-size:14px;color:#33463F;">
+                <b>${l.learner}</b> learns <span class="pill lm" style="padding:2px 8px;font-size:12px;">${l.skill}</span> from <b>${l.teacher}</b>
+              </div>
+            `).join('');
+
+            return `
+              <div class="card card-lift" style="padding:24px;display:flex;flex-direction:column;gap:16px;background:#fff;border:2px solid #0D1F1A;">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                  <span class="pill ${c.badgeCls}">${c.label}</span>
+                  <span style="font-size:13px;font-weight:700;color:#4A5B55;">Rank #${c.rank}</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;">
+                  ${memberRing}
+                </div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  ${linkList}
+                </div>
+                <div style="margin-top:auto;padding-top:12px;border-top:1px dashed #0D1F1A;">
+                  <a href="/login" class="btn btn-ink btn-sm" style="width:100%;">Propose this swap</a>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // Initialize on Asha
+        selectStudent('Asha');
+        </script>
+        """;
     }
 
     // =========================================================================
@@ -575,39 +854,40 @@ public class HtmlRenderer {
 
     public static String renderSignup() {
         return """
-        <div style="max-width: 480px; margin: 2rem auto;">
-          <div class="glass-card">
-            <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem; font-weight: 800;">Create Account</h2>
-            <p class="text-muted" style="margin-bottom: 1.75rem; font-size: 0.92rem;">Join the skill-sharing barter community</p>
+        <div style="max-width: 480px; margin: 3rem auto;">
+          <div class="card" style="padding: 36px; box-shadow: 8px 8px 0 #0D1F1A;">
+            <div style="margin-bottom: 24px;">
+              <span class="pill lm" style="margin-bottom: 8px;">Zero-Money Marketplace</span>
+              <h2 style="font-size: 2rem; font-weight: 800;">Create Account</h2>
+              <p style="color: #33463F; font-size: 0.95rem; margin-top: 4px;">Join the student peer skill barter network</p>
+            </div>
 
             <form action="/signup" method="POST">
               <div class="form-group">
-                <label class="form-label" for="name">Your Full Name or Handle</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Elena Rostova" required>
+                <label class="form-label" for="name">Your Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Maya" required autofocus>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="pin">Secret 4-Digit Security PIN</label>
-                <input type="password" id="pin" name="pin" class="form-control" placeholder="••••" pattern="[0-9]{4,}" title="At least 4 digits" required>
-                <small class="text-dim" style="font-size:0.78rem;">Your PIN is cryptographically salted and hashed with SHA-256.</small>
+                <label class="form-label" for="pin">Create 4-Digit PIN</label>
+                <input type="password" id="pin" name="pin" class="form-control" placeholder="••••" maxlength="8" required>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="contact">Contact Information</label>
-                <input type="text" id="contact" name="contact" class="form-control" placeholder="email@college.edu or @telegram" required>
-                <small class="text-dim" style="font-size:0.78rem;">🔒 Hidden from public. Only revealed to swap partners after all accept.</small>
+                <label class="form-label" for="contact">Contact Info (Kept hidden until all accept)</label>
+                <input type="text" id="contact" name="contact" class="form-control" placeholder="e.g. maya@campus.edu or @maya_social" required>
               </div>
 
               <div class="form-group">
-                <label class="form-label" for="bio">Short Bio & Academic Focus</label>
-                <input type="text" id="bio" name="bio" class="form-control" placeholder="e.g. CS Sophomore passionate about WebDev and Acoustic Guitar">
+                <label class="form-label" for="bio">Short Bio & Interests</label>
+                <input type="text" id="bio" name="bio" class="form-control" placeholder="e.g. Sophomore passionate about Machine Learning and Ukulele">
               </div>
 
-              <button type="submit" class="btn btn-primary btn-md" style="width: 100%; margin-top: 1rem;">Complete Registration</button>
+              <button type="submit" class="btn btn-lime btn-lg" style="width: 100%; margin-top: 0.5rem;">Join Free & Start Swapping</button>
             </form>
 
-            <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;" class="text-muted">
-              Already have an account? <a href="/login" style="color: var(--primary); font-weight: 600;">Sign In</a>
+            <div style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #4A5B55;">
+              Already have an account? <a href="/login" style="color: var(--color-blue); font-weight: 700;">Log In</a>
             </div>
           </div>
         </div>
@@ -616,14 +896,17 @@ public class HtmlRenderer {
 
     public static String renderLogin() {
         return """
-        <div style="max-width: 440px; margin: 2rem auto;">
-          <div class="glass-card">
-            <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem; font-weight: 800;">Welcome Back</h2>
-            <p class="text-muted" style="margin-bottom: 1.75rem; font-size: 0.92rem;">Enter your student name and PIN</p>
+        <div style="max-width: 440px; margin: 3rem auto;">
+          <div class="card" style="padding: 36px; box-shadow: 8px 8px 0 #0D1F1A;">
+            <div style="margin-bottom: 24px;">
+              <span class="pill lm" style="margin-bottom: 8px;">Member Access</span>
+              <h2 style="font-size: 2rem; font-weight: 800;">Welcome Back</h2>
+              <p style="color: #33463F; font-size: 0.95rem; margin-top: 4px;">Enter your student name and PIN</p>
+            </div>
 
             <form action="/login" method="POST">
               <div class="form-group">
-                <label class="form-label" for="name">Name</label>
+                <label class="form-label" for="name">Student Name</label>
                 <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Asha" required autofocus>
               </div>
 
@@ -632,11 +915,11 @@ public class HtmlRenderer {
                 <input type="password" id="pin" name="pin" class="form-control" placeholder="••••" required>
               </div>
 
-              <button type="submit" class="btn btn-primary btn-md" style="width: 100%; margin-top: 0.5rem;">Log In</button>
+              <button type="submit" class="btn btn-ink btn-lg" style="width: 100%; margin-top: 0.5rem;">Log In</button>
             </form>
 
-            <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem;" class="text-muted">
-              Need an account? <a href="/signup" style="color: var(--primary); font-weight: 600;">Sign Up</a>
+            <div style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem; color: #4A5B55;">
+              New to SkillSwap? <a href="/signup" style="color: var(--color-blue); font-weight: 700;">Join Free</a>
             </div>
           </div>
         </div>
@@ -644,7 +927,7 @@ public class HtmlRenderer {
     }
 
     // =========================================================================
-    // Page: Profile & Skill Management (F2)
+    // Page: Profile & Skill Management
     // =========================================================================
 
     public static String renderProfile(Member member) {
@@ -652,198 +935,214 @@ public class HtmlRenderer {
 
         sb.append("<div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;\">\n");
         sb.append("  <div>\n");
-        sb.append("    <h1 style=\"font-size: 2.2rem; font-weight: 800;\">My Profile & Skills</h1>\n");
-        sb.append("    <p class=\"text-muted\">Manage what you teach, what you want to learn, and your weekly barter hours.</p>\n");
+        sb.append("    <h1 style=\"font-size: 2.4rem; font-weight: 800;\">My Profile & Skills</h1>\n");
+        sb.append("    <p style=\"color: #33463F; font-size: 1.05rem;\">Manage what you teach, what you want to learn, and your weekly barter hours.</p>\n");
         sb.append("  </div>\n");
 
         if (member.isLocked()) {
-            sb.append("  <span class=\"badge\" style=\"background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444; font-size: 0.88rem;\">\n");
+            sb.append("  <span class=\"st wait\" style=\"font-size: 0.9rem;\">\n");
             sb.append("    🔒 Locked in Active Proposal (").append(SecurityUtil.escapeHtml(member.getLockedInProposalId())).append(")\n");
             sb.append("  </span>\n");
         } else {
-            sb.append("  <a href=\"/swaps\" class=\"btn btn-primary btn-md\">⚡ Find Available Swaps</a>\n");
+            sb.append("  <a href=\"/swaps\" class=\"btn btn-lime btn-md\">⚡ View Matched Swaps</a>\n");
         }
         sb.append("</div>\n");
 
-        // Profile Overview & Availability Form
-        sb.append("<div class=\"grid-3\" style=\"margin-bottom: 2rem;\">\n");
-        sb.append("  <div class=\"glass-card\">\n");
-        sb.append("    <h3 style=\"margin-bottom: 0.5rem;\">👤 ").append(SecurityUtil.escapeHtml(member.getName())).append("</h3>\n");
-        sb.append("    <p class=\"text-muted\" style=\"font-size:0.9rem; margin-bottom: 1rem;\">").append(SecurityUtil.escapeHtml(member.getBio())).append("</p>\n");
-        sb.append("    <div style=\"font-size: 0.88rem; margin-bottom: 0.5rem;\">🔒 Contact: <code>").append(SecurityUtil.escapeHtml(member.getContact())).append("</code></div>\n");
-        sb.append("    <div style=\"font-size: 0.88rem; color: #fbbf24;\">⭐ Reputation: <strong>").append(member.getAverageRating()).append(" / 5.0</strong> (").append(member.getRatingCount()).append(" reviews)</div>\n");
+        // Profile Overview Card & Availability
+        sb.append("<div class=\"grid-2\" style=\"margin-bottom: 2rem;\">\n");
+        sb.append("  <div class=\"card\" style=\"padding: 28px;\">\n");
+        String avClass = getAvatarClass(member.getName());
+        String initial = member.getName().substring(0, 1).toUpperCase();
+        sb.append("    <div style=\"display:flex;align-items:center;gap:14px;margin-bottom:14px;\">\n");
+        sb.append("      <span class=\"av ").append(avClass).append("\" style=\"width:48px;height:48px;font-size:18px;\">").append(initial).append("</span>\n");
+        sb.append("      <div>\n");
+        sb.append("        <h3 style=\"font-size: 1.4rem; font-weight: 800;\">").append(SecurityUtil.escapeHtml(member.getName())).append("</h3>\n");
+        sb.append("        <span class=\"pill lm\">⭐ ").append(member.getAverageRating()).append(" / 5.0 (").append(member.getRatingCount()).append(" reviews)</span>\n");
+        sb.append("      </div>\n");
+        sb.append("    </div>\n");
+
+        if (member.getBio() != null && !member.getBio().isEmpty()) {
+            sb.append("    <p style=\"color: #33463F; font-size: 0.95rem; margin-bottom: 12px;\">").append(SecurityUtil.escapeHtml(member.getBio())).append("</p>\n");
+        }
+        sb.append("    <div style=\"font-size: 0.9rem; color: #4A5B55;\">🔒 Private Contact: <b>").append(SecurityUtil.escapeHtml(member.getContact())).append("</b> (Revealed only to mutual swap partners)</div>\n");
         sb.append("  </div>\n");
 
         // Availability Settings
-        sb.append("  <div class=\"glass-card\" style=\"grid-column: span 2;\">\n");
+        sb.append("  <div class=\"card\" style=\"padding: 28px;\">\n");
         sb.append("    <h3 style=\"margin-bottom: 0.75rem;\">⏰ Availability & Barter Commitment</h3>\n");
         sb.append("    <form action=\"/profile/availability\" method=\"POST\" style=\"display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;\">\n");
-        sb.append("      <div style=\"flex: 1; min-width: 140px;\">\n");
-        sb.append("        <label class=\"form-label\">Weekly Hours Available</label>\n");
-        sb.append("        <input type=\"number\" name=\"hours\" min=\"1\" max=\"40\" class=\"form-control\" value=\"").append(member.getWeeklyAvailabilityHours()).append("\" required>\n");
+        sb.append("      <div class=\"form-group\" style=\"flex: 1; min-width: 140px; margin-bottom: 0;\">\n");
+        sb.append("        <label class=\"form-label\" for=\"hours\">Hours Free Per Week</label>\n");
+        sb.append("        <input type=\"number\" id=\"hours\" name=\"hours\" class=\"form-control\" min=\"1\" max=\"40\" value=\"").append(member.getWeeklyAvailabilityHours()).append("\" required>\n");
         sb.append("      </div>\n");
-        sb.append("      <div style=\"flex: 2; min-width: 200px;\">\n");
-        sb.append("        <label class=\"form-label\">Schedule Notes</label>\n");
-        sb.append("        <input type=\"text\" name=\"note\" class=\"form-control\" value=\"").append(SecurityUtil.escapeHtml(member.getAvailabilityNote())).append("\" placeholder=\"e.g. Weekends, Evenings after 5pm\">\n");
-        sb.append("      </div>\n");
-        sb.append("      <button type=\"submit\" class=\"btn btn-outline btn-md\">Save Availability</button>\n");
+        sb.append("      <button type=\"submit\" class=\"btn btn-ink btn-md\" style=\"min-height: 44px;\">Update Hours</button>\n");
         sb.append("    </form>\n");
+        sb.append("    <p style=\"font-size: 0.85rem; color: #4A5B55; margin-top: 10px;\">Matching algorithm pairs students with compatible weekly time commitments.</p>\n");
         sb.append("  </div>\n");
         sb.append("</div>\n");
 
-        // Skills Grid: Teaches (Offer) vs Wants (Desire)
-        sb.append("<div class=\"grid-2\">\n");
+        // Skills Management Section: Teaches vs Wants
+        sb.append("<div class=\"grid-2\" style=\"margin-bottom: 2rem;\">\n");
 
-        // 1. Skills I Can Teach
-        sb.append("  <div class=\"glass-card\">\n");
-        sb.append("    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;\">\n");
-        sb.append("      <div>\n");
-        sb.append("        <h2 style=\"font-size: 1.25rem; font-weight: 700; color: #6ee7b7;\">🎓 Skills I Can Teach</h2>\n");
-        sb.append("        <p class=\"text-dim\" style=\"font-size: 0.82rem;\">What you offer in trade</p>\n");
-        sb.append("      </div>\n");
-        sb.append("      <span class=\"badge\" style=\"background: rgba(16, 185, 129, 0.2); color: #6ee7b7;\">").append(member.getTeaches().size()).append(" skills</span>\n");
+        // Teaches Card
+        sb.append("  <div class=\"card\" style=\"padding: 28px;\">\n");
+        sb.append("    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;\">\n");
+        sb.append("      <h3 style=\"font-size: 1.3rem; font-weight: 800;\">🎓 Skills I Teach (").append(member.getTeaches().size()).append(")</h3>\n");
+        sb.append("      <span class=\"pill lm\">Mentorship</span>\n");
         sb.append("    </div>\n");
 
-        sb.append("    <div style=\"display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;\">\n");
         if (member.getTeaches().isEmpty()) {
-            sb.append("      <div class=\"text-muted\" style=\"padding: 1rem; border: 1px dashed var(--border-color); border-radius: var(--radius-sm); text-align: center;\">No skills listed yet. Add one below!</div>\n");
+            sb.append("    <p style=\"color: #4A5B55; font-size: 0.9rem; margin-bottom: 1.5rem;\">You haven't listed any skills you can teach. Add at least one to unlock trades!</p>\n");
         } else {
+            sb.append("    <div style=\"display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;\">\n");
             for (Skill s : member.getTeaches()) {
-                sb.append(renderSkillRow(s, "teaches"));
+                sb.append("      <div style=\"display: flex; justify-content: space-between; align-items: center; background: #F1F4EF; border: 1px solid #0D1F1A; border-radius: 12px; padding: 0.6rem 1rem;\">\n");
+                sb.append("        <div>\n");
+                sb.append("          <strong style=\"font-size: 1rem;\">").append(SecurityUtil.escapeHtml(s.getName())).append("</strong>\n");
+                sb.append("          <span style=\"font-size: 0.8rem; color: #33463F; margin-left: 0.5rem;\">· ").append(s.getCategory().getDisplayName()).append(" · <b>").append(s.getLevel().getDisplayName()).append("</b></span>\n");
+                sb.append("        </div>\n");
+                sb.append("        <form action=\"/profile/skill/delete\" method=\"POST\" style=\"display: inline;\">\n");
+                sb.append("          <input type=\"hidden\" name=\"name\" value=\"").append(SecurityUtil.escapeHtml(s.getName())).append("\">\n");
+                sb.append("          <input type=\"hidden\" name=\"type\" value=\"teaches\">\n");
+                sb.append("          <button type=\"submit\" class=\"btn btn-ghost btn-sm\" style=\"min-height:30px;padding:0 10px;font-size:12px;\" onclick=\"return confirm('Remove skill?');\">✕ Remove</button>\n");
+                sb.append("        </form>\n");
+                sb.append("      </div>\n");
             }
+            sb.append("    </div>\n");
         }
-        sb.append("    </div>\n");
 
-        sb.append(renderAddSkillForm("teaches"));
+        // Add Teach Skill Form
+        sb.append("    <div style=\"border-top: 2px dashed #0D1F1A; padding-top: 1.25rem;\">\n");
+        sb.append("      <h4 style=\"font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;\">+ Add a Skill You Can Teach</h4>\n");
+        sb.append("      <form action=\"/profile/skill/add\" method=\"POST\">\n");
+        sb.append("        <input type=\"hidden\" name=\"type\" value=\"teaches\">\n");
+        sb.append("        <div class=\"form-group\">\n");
+        sb.append("          <input type=\"text\" name=\"name\" class=\"form-control\" placeholder=\"e.g. Guitar, Python, UI Design\" required>\n");
+        sb.append("        </div>\n");
+        sb.append("        <div style=\"display: flex; gap: 0.75rem; margin-bottom: 1rem;\">\n");
+        sb.append("          <select name=\"category\" class=\"form-control\" style=\"flex: 1;\">\n");
+        for (SkillCategory cat : SkillCategory.values()) {
+            sb.append("            <option value=\"").append(cat.name()).append("\">").append(cat.getDisplayName()).append("</option>\n");
+        }
+        sb.append("          </select>\n");
+        sb.append("          <select name=\"level\" class=\"form-control\" style=\"flex: 1;\">\n");
+        sb.append("            <option value=\"INTERMEDIATE\">Intermediate</option>\n");
+        sb.append("            <option value=\"ADVANCED\" selected>Advanced</option>\n");
+        sb.append("            <option value=\"BEGINNER\">Beginner</option>\n");
+        sb.append("          </select>\n");
+        sb.append("        </div>\n");
+        sb.append("        <button type=\"submit\" class=\"btn btn-ink btn-sm\" style=\"width: 100%;\">Add Taught Skill</button>\n");
+        sb.append("      </form>\n");
+        sb.append("    </div>\n");
         sb.append("  </div>\n");
 
-        // 2. Skills I Want to Learn
-        sb.append("  <div class=\"glass-card\">\n");
-        sb.append("    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;\">\n");
-        sb.append("      <div>\n");
-        sb.append("        <h2 style=\"font-size: 1.25rem; font-weight: 700; color: #93c5fd;\">💡 Skills I Want to Learn</h2>\n");
-        sb.append("        <p class=\"text-dim\" style=\"font-size: 0.82rem;\">What you desire in trade</p>\n");
-        sb.append("      </div>\n");
-        sb.append("      <span class=\"badge\" style=\"background: rgba(59, 130, 246, 0.2); color: #93c5fd;\">").append(member.getWants().size()).append(" skills</span>\n");
+        // Wants Card
+        sb.append("  <div class=\"card\" style=\"padding: 28px;\">\n");
+        sb.append("    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;\">\n");
+        sb.append("      <h3 style=\"font-size: 1.3rem; font-weight: 800;\">🎯 Skills I Want to Learn (").append(member.getWants().size()).append(")</h3>\n");
+        sb.append("      <span class=\"pill\">Learning Goals</span>\n");
         sb.append("    </div>\n");
 
-        sb.append("    <div style=\"display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;\">\n");
         if (member.getWants().isEmpty()) {
-            sb.append("      <div class=\"text-muted\" style=\"padding: 1rem; border: 1px dashed var(--border-color); border-radius: var(--radius-sm); text-align: center;\">No desired skills listed yet. Add one below!</div>\n");
+            sb.append("    <p style=\"color: #4A5B55; font-size: 0.9rem; margin-bottom: 1.5rem;\">You haven't listed any skills you want to learn. Add skills to match with peers!</p>\n");
         } else {
+            sb.append("    <div style=\"display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 1.5rem;\">\n");
             for (Skill s : member.getWants()) {
-                sb.append(renderSkillRow(s, "wants"));
+                sb.append("      <div style=\"display: flex; justify-content: space-between; align-items: center; background: #F1F4EF; border: 1px solid #0D1F1A; border-radius: 12px; padding: 0.6rem 1rem;\">\n");
+                sb.append("        <div>\n");
+                sb.append("          <strong style=\"font-size: 1rem;\">").append(SecurityUtil.escapeHtml(s.getName())).append("</strong>\n");
+                sb.append("          <span style=\"font-size: 0.8rem; color: #33463F; margin-left: 0.5rem;\">· ").append(s.getCategory().getDisplayName()).append(" · <b>").append(s.getLevel().getDisplayName()).append("</b></span>\n");
+                sb.append("        </div>\n");
+                sb.append("        <form action=\"/profile/skill/delete\" method=\"POST\" style=\"display: inline;\">\n");
+                sb.append("          <input type=\"hidden\" name=\"name\" value=\"").append(SecurityUtil.escapeHtml(s.getName())).append("\">\n");
+                sb.append("          <input type=\"hidden\" name=\"type\" value=\"wants\">\n");
+                sb.append("          <button type=\"submit\" class=\"btn btn-ghost btn-sm\" style=\"min-height:30px;padding:0 10px;font-size:12px;\" onclick=\"return confirm('Remove skill?');\">✕ Remove</button>\n");
+                sb.append("        </form>\n");
+                sb.append("      </div>\n");
             }
+            sb.append("    </div>\n");
         }
-        sb.append("    </div>\n");
 
-        sb.append(renderAddSkillForm("wants"));
+        // Add Want Skill Form
+        sb.append("    <div style=\"border-top: 2px dashed #0D1F1A; padding-top: 1.25rem;\">\n");
+        sb.append("      <h4 style=\"font-size: 1rem; font-weight: 700; margin-bottom: 0.75rem;\">+ Add a Skill You Want to Learn</h4>\n");
+        sb.append("      <form action=\"/profile/skill/add\" method=\"POST\">\n");
+        sb.append("        <input type=\"hidden\" name=\"type\" value=\"wants\">\n");
+        sb.append("        <div class=\"form-group\">\n");
+        sb.append("          <input type=\"text\" name=\"name\" class=\"form-control\" placeholder=\"e.g. Excel, Photography, French\" required>\n");
+        sb.append("        </div>\n");
+        sb.append("        <div style=\"display: flex; gap: 0.75rem; margin-bottom: 1rem;\">\n");
+        sb.append("          <select name=\"category\" class=\"form-control\" style=\"flex: 1;\">\n");
+        for (SkillCategory cat : SkillCategory.values()) {
+            sb.append("            <option value=\"").append(cat.name()).append("\">").append(cat.getDisplayName()).append("</option>\n");
+        }
+        sb.append("          </select>\n");
+        sb.append("          <select name=\"level\" class=\"form-control\" style=\"flex: 1;\">\n");
+        sb.append("            <option value=\"BEGINNER\" selected>Beginner (Need Intermediate/Adv Mentor)</option>\n");
+        sb.append("            <option value=\"INTERMEDIATE\">Intermediate</option>\n");
+        sb.append("            <option value=\"ADVANCED\">Advanced</option>\n");
+        sb.append("          </select>\n");
+        sb.append("        </div>\n");
+        sb.append("        <button type=\"submit\" class=\"btn btn-lime btn-sm\" style=\"width: 100%;\">Add Learning Goal</button>\n");
+        sb.append("      </form>\n");
+        sb.append("    </div>\n");
         sb.append("  </div>\n");
 
         sb.append("</div>\n");
-        return sb.toString();
-    }
 
-    private static String renderSkillRow(Skill skill, String skillType) {
-        return """
-        <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(15, 23, 42, 0.6); padding: 0.65rem 0.9rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-          <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <span style="font-size: 1.1rem;">%s</span>
-            <div>
-              <strong style="font-size: 0.95rem;">%s</strong>
-              <div style="display: flex; gap: 0.4rem; margin-top: 0.2rem;">
-                <span class="badge" style="background: rgba(255,255,255,0.06); font-size: 0.72rem; color: #94a3b8;">%s</span>
-                <span class="badge" style="background: %s; color: #ffffff; font-size: 0.72rem;">%s</span>
-              </div>
-            </div>
-          </div>
-          <form action="/profile/skills/remove" method="POST" style="margin: 0;">
-            <input type="hidden" name="type" value="%s">
-            <input type="hidden" name="name" value="%s">
-            <button type="submit" class="btn btn-ghost btn-sm" title="Remove skill" style="color: #ef4444; padding: 0.3rem 0.6rem;">✕</button>
-          </form>
-        </div>
-        """.formatted(
-            skill.getCategory().getEmoji(),
-            SecurityUtil.escapeHtml(skill.getName()),
-            SecurityUtil.escapeHtml(skill.getCategory().getDisplayName()),
-            skill.getLevel().getColor(),
-            skill.getLevel().getDisplayName(),
-            skillType,
-            SecurityUtil.escapeHtml(skill.getName())
-        );
-    }
-
-    private static String renderAddSkillForm(String type) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<form action=\"/profile/skills/add\" method=\"POST\" style=\"background: rgba(15, 23, 42, 0.4); padding: 1rem; border-radius: var(--radius-sm); border: 1px dashed var(--border-color);\">\n");
-        sb.append("  <input type=\"hidden\" name=\"type\" value=\"").append(type).append("\">\n");
-        sb.append("  <div style=\"font-weight: 600; font-size: 0.88rem; margin-bottom: 0.75rem;\">+ Add New Skill</div>\n");
-
-        sb.append("  <div style=\"display: flex; flex-direction: column; gap: 0.65rem;\">\n");
-        sb.append("    <input type=\"text\" name=\"name\" class=\"form-control\" placeholder=\"Skill name (e.g. Python, Guitar, UI Design)\" required>\n");
-
-        sb.append("    <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;\">\n");
-        sb.append("      <select name=\"category\" class=\"form-control\">\n");
-        for (SkillCategory cat : SkillCategory.values()) {
-            sb.append("        <option value=\"").append(cat.name()).append("\">").append(cat.getEmoji()).append(" ").append(cat.getDisplayName()).append("</option>\n");
-        }
-        sb.append("      </select>\n");
-
-        sb.append("      <select name=\"level\" class=\"form-control\">\n");
-        for (SkillLevel lvl : SkillLevel.values()) {
-            sb.append("        <option value=\"").append(lvl.name()).append("\">").append(lvl.getDisplayName()).append("</option>\n");
-        }
-        sb.append("      </select>\n");
-        sb.append("    </div>\n");
-
-        sb.append("    <button type=\"submit\" class=\"btn btn-primary btn-sm\" style=\"margin-top: 0.25rem;\">Add to ").append("teaches".equals(type) ? "Teaches" : "Wants").append("</button>\n");
-        sb.append("  </div>\n");
-        sb.append("</form>\n");
         return sb.toString();
     }
 
     // =========================================================================
-    // Page: Swap Discovery (F3 & F7)
+    // Page: Swaps Discovery & Member Dashboard
     // =========================================================================
 
     public static String renderSwaps(Member currentUser, List<SwapCycle> discoveredCycles, List<AlmostMatchFinder.Opportunity> almostMatches, int maxLen) {
         StringBuilder sb = new StringBuilder();
 
+        // Dashboard Header
         sb.append("<div style=\"display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;\">\n");
         sb.append("  <div>\n");
-        sb.append("    <h1 style=\"font-size: 2.2rem; font-weight: 800;\">⚡ Swap Discovery</h1>\n");
-        sb.append("    <p class=\"text-muted\">Ranked multi-way barter cycles involving <strong>").append(SecurityUtil.escapeHtml(currentUser.getName())).append("</strong></p>\n");
+        sb.append("    <h1 style=\"font-size: 2.6rem; font-weight: 800; line-height: 1.05;\">Hi ").append(SecurityUtil.escapeHtml(currentUser.getName())).append("</h1>\n");
+        sb.append("    <p style=\"color: #33463F; font-size: 1.1rem; margin-top: 4px;\">\n");
+        if (currentUser.isLocked()) {
+            sb.append("You are currently committed to an active swap proposal (#").append(SecurityUtil.escapeHtml(currentUser.getLockedInProposalId())).append(").");
+        } else if (discoveredCycles.isEmpty()) {
+            sb.append("You have no active matches right now. Add more skills to unlock new circles.");
+        } else {
+            sb.append("You have <b>").append(discoveredCycles.size()).append("</b> barter exchange opportunity ready for review.");
+        }
+        sb.append("    </p>\n");
         sb.append("  </div>\n");
 
-        // Length Filter Tabs
-        sb.append("  <div style=\"display: flex; align-items: center; gap: 0.5rem; background: rgba(15, 23, 42, 0.7); padding: 0.3rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);\">\n");
-        sb.append("    <span style=\"font-size: 0.8rem; color: var(--text-muted); margin-left: 0.4rem;\">Max Depth:</span>\n");
+        // Depth Filter Pills
+        sb.append("  <div style=\"display: flex; align-items: center; gap: 6px; background: #fff; padding: 6px; border-radius: 999px; border: 2px solid #0D1F1A;\">\n");
+        sb.append("    <span style=\"font-size: 13px; font-weight: 700; color: #4A5B55; margin: 0 8px;\">Depth:</span>\n");
         for (int l = 2; l <= 4; l++) {
             boolean active = l == maxLen;
-            sb.append("    <a href=\"/swaps?maxLen=").append(l).append("\" class=\"btn btn-sm ").append(active ? "btn-primary" : "btn-ghost").append("\">").append(l).append("-Way</a>\n");
+            sb.append("    <a href=\"/swaps?maxLen=").append(l).append("\" class=\"btn btn-sm ").append(active ? "btn-lime" : "btn-ghost").append("\" style=\"min-height:32px;padding:0 12px;\">").append(l).append("-Way</a>\n");
         }
         sb.append("  </div>\n");
         sb.append("</div>\n");
 
         if (currentUser.isLocked()) {
             sb.append("<div class=\"alert alert-danger\">\n");
-            sb.append("  <span>🔒 You are currently committed to an active swap proposal. You cannot propose new swaps until it finishes or cancels.</span>\n");
+            sb.append("  <span>🔒 Concurrency Lock Active: You are committed to an active swap proposal. Contacts and schedule are viewable in the Proposals tab.</span>\n");
             sb.append("</div>\n");
         }
 
-        // Section 1: Discovered Cycles
+        // Section: Discovered Swap Cycles
         if (discoveredCycles.isEmpty()) {
-            sb.append("<div class=\"glass-card\" style=\"text-align: center; padding: 3.5rem 1.5rem; margin-bottom: 2.5rem;\">\n");
+            sb.append("<div class=\"card\" style=\"text-align: center; padding: 48px 24px; margin-bottom: 2.5rem;\">\n");
             sb.append("  <div style=\"font-size: 3rem; margin-bottom: 1rem;\">🔍</div>\n");
-            sb.append("  <h3 style=\"font-size: 1.4rem; margin-bottom: 0.5rem;\">No Direct or Cyclic Swaps Found Right Now</h3>\n");
-            sb.append("  <p class=\"text-muted\" style=\"max-width: 500px; margin: 0 auto 1.5rem auto;\">Try adding more skills to your 'Wants' or 'Teaches' list on your profile, or explore the almost-matches below!</p>\n");
-            sb.append("  <a href=\"/profile\" class=\"btn btn-primary btn-md\">Manage My Skills</a>\n");
+            sb.append("  <h3 style=\"font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem;\">No Swap Cycles Found Right Now</h3>\n");
+            sb.append("  <p style=\"color: #4A5B55; max-width: 500px; margin: 0 auto 1.5rem auto;\">Try adding more skills to what you want to learn or teach, or see the almost-matches below!</p>\n");
+            sb.append("  <a href=\"/profile\" class=\"btn btn-lime btn-md\">Add Skills to Profile</a>\n");
             sb.append("</div>\n");
         } else {
             sb.append("<div style=\"margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;\">\n");
-            sb.append("  <h2 style=\"font-size: 1.3rem; font-weight: 700;\">Discovered Matches (").append(discoveredCycles.size()).append(")</h2>\n");
-            sb.append("  <span class=\"text-muted\" style=\"font-size: 0.85rem;\">Ranked by Composite Score (Length, Ratings & Availability)</span>\n");
+            sb.append("  <h2 style=\"font-size: 1.4rem; font-weight: 800;\">Discovered Matches (").append(discoveredCycles.size()).append(")</h2>\n");
+            sb.append("  <span style=\"font-size: 0.85rem; color: #4A5B55;\">Ranked by Composite Heuristics (Cycle Length, Peer Ratings & Availability)</span>\n");
             sb.append("</div>\n");
 
             for (int i = 0; i < discoveredCycles.size(); i++) {
@@ -852,14 +1151,83 @@ public class HtmlRenderer {
             }
         }
 
-        // Section 2: Almost-Matches (Feature F7)
+        // Section: Dashboard Split (My Skills & Other Opportunities)
+        sb.append("<div class=\"grid-2\" style=\"margin-top: 2rem;\">\n");
+
+        // My Skills Card
+        sb.append("  <div class=\"card\" style=\"padding: 28px; display: flex; flex-direction: column; gap: 18px;\">\n");
+        sb.append("    <h3 style=\"font-size: 22px; font-weight: 800;\">My Skills Overview</h3>\n");
+        sb.append("    <div>\n");
+        sb.append("      <span style=\"font-size: 12px; font-weight: 700; color: #4A5B55; display: block; margin-bottom: 6px;\">I CAN TEACH</span>\n");
+        sb.append("      <div style=\"display: flex; flex-wrap: wrap; gap: 6px;\">\n");
+        for (Skill s : currentUser.getTeaches()) {
+            sb.append("        <span class=\"pill lm\">").append(SecurityUtil.escapeHtml(s.getName())).append(" · ").append(s.getLevel().getDisplayName()).append("</span>\n");
+        }
+        sb.append("      </div>\n");
+        sb.append("    </div>\n");
+
+        sb.append("    <div>\n");
+        sb.append("      <span style=\"font-size: 12px; font-weight: 700; color: #4A5B55; display: block; margin-bottom: 6px;\">I WANT TO LEARN</span>\n");
+        sb.append("      <div style=\"display: flex; flex-wrap: wrap; gap: 6px;\">\n");
+        for (Skill s : currentUser.getWants()) {
+            sb.append("        <span class=\"pill\">").append(SecurityUtil.escapeHtml(s.getName())).append(" · ").append(s.getLevel().getDisplayName()).append("</span>\n");
+        }
+        sb.append("      </div>\n");
+        sb.append("    </div>\n");
+
+        sb.append("    <div>\n");
+        sb.append("      <span style=\"font-size: 12px; font-weight: 700; color: #4A5B55; display: block; margin-bottom: 4px;\">AVAILABLE HOURS</span>\n");
+        sb.append("      <span style=\"font-weight: 700;\">").append(currentUser.getWeeklyAvailabilityHours()).append(" hours / week</span>\n");
+        sb.append("    </div>\n");
+
+        sb.append("    <div style=\"margin-top: auto; padding-top: 12px;\">\n");
+        sb.append("      <a href=\"/profile\" class=\"btn btn-outline btn-sm\">Manage Skills in Profile</a>\n");
+        sb.append("    </div>\n");
+        sb.append("  </div>\n");
+
+        // Rate Last Teacher Card
+        sb.append("  <div class=\"card\" style=\"padding: 28px; display: flex; flex-direction: column; gap: 16px;\">\n");
+        sb.append("    <h3 style=\"font-size: 22px; font-weight: 800;\">Rate Your Peer Lessons</h3>\n");
+        sb.append("    <p style=\"color: #33463F; font-size: 14px;\">Completed a learning exchange? Submit feedback and star ratings to enhance peer reputation across the campus.</p>\n");
+
+        sb.append("    <form action=\"/review\" method=\"POST\" style=\"display: flex; flex-direction: column; gap: 12px;\">\n");
+        sb.append("      <div class=\"form-group\" style=\"margin-bottom:0;\">\n");
+        sb.append("        <label class=\"form-label\" for=\"teacherName\">Teacher Name</label>\n");
+        sb.append("        <input type=\"text\" id=\"teacherName\" name=\"teacherName\" class=\"form-control\" placeholder=\"e.g. Ravi or Meena\" required>\n");
+        sb.append("      </div>\n");
+
+        sb.append("      <div style=\"display: flex; align-items: center; justify-content: space-between;\">\n");
+        sb.append("        <span class=\"form-label\" style=\"margin-bottom:0;\">Rating (1 to 5 Stars):</span>\n");
+        sb.append("        <div style=\"display:flex;\" id=\"starRating\">\n");
+        for (int star = 1; star <= 5; star++) {
+            sb.append("          <label style=\"cursor:pointer;\">\n");
+            sb.append("            <input type=\"radio\" name=\"rating\" value=\"").append(star).append("\" style=\"display:none;\" ").append(star == 5 ? "checked" : "").append(">\n");
+            sb.append("            <span class=\"star on\" style=\"width:32px;height:32px;\">\n");
+            sb.append("              <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z\" stroke-linejoin=\"round\"></path></svg>\n");
+            sb.append("            </span>\n");
+            sb.append("          </label>\n");
+        }
+        sb.append("        </div>\n");
+        sb.append("      </div>\n");
+
+        sb.append("      <div class=\"form-group\" style=\"margin-bottom:0;\">\n");
+        sb.append("        <input type=\"text\" name=\"comment\" class=\"form-control\" placeholder=\"Short review (e.g. Super clear explanations!)\" required>\n");
+        sb.append("      </div>\n");
+
+        sb.append("      <button type=\"submit\" class=\"btn btn-lime btn-sm\" style=\"margin-top: 4px;\">Submit Peer Review</button>\n");
+        sb.append("    </form>\n");
+        sb.append("  </div>\n");
+
+        sb.append("</div>\n");
+
+        // Section: Almost-Matches
         if (almostMatches != null && !almostMatches.isEmpty()) {
             sb.append("<div style=\"margin-top: 3.5rem;\">\n");
             sb.append("  <div style=\"display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;\">\n");
-            sb.append("    <h2 style=\"font-size: 1.4rem; font-weight: 800; color: #fbbf24;\">✨ Almost-Matches & Opportunities (Feature F7)</h2>\n");
-            sb.append("    <span class=\"badge\" style=\"background: rgba(251, 191, 36, 0.2); color: #fbbf24;\">Stretch Feature</span>\n");
+            sb.append("    <h2 style=\"font-size: 1.4rem; font-weight: 800; color: #0D1F1A;\">✨ Almost-Matches & Unlockable Swaps</h2>\n");
+            sb.append("    <span class=\"pill lm\">Smart Insights</span>\n");
             sb.append("  </div>\n");
-            sb.append("  <p class=\"text-muted\" style=\"font-size: 0.92rem; margin-bottom: 1.5rem;\">Adding any of these in-demand skills to your <em>Wanted Skills</em> will instantly unlock new barter cycles:</p>\n");
+            sb.append("  <p style=\"color: #4A5B55; font-size: 0.95rem; margin-bottom: 1.5rem;\">Adding any of these in-demand skills to your desired list will instantly unlock new barter cycles:</p>\n");
 
             sb.append("  <div class=\"grid-3\">\n");
             for (AlmostMatchFinder.Opportunity opp : almostMatches) {
@@ -876,52 +1244,45 @@ public class HtmlRenderer {
         StringBuilder sb = new StringBuilder();
         int size = cycle.size();
 
-        sb.append("<div class=\"swap-cycle-card\">\n");
-        sb.append("  <div style=\"display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;\">\n");
-        sb.append("    <div style=\"display: flex; align-items: center; gap: 0.75rem;\">\n");
-        sb.append("      <span style=\"font-size: 1.1rem; font-weight: 800; color: #a5b4fc;\">#").append(rank).append("</span>\n");
-        sb.append("      <h3 style=\"font-size: 1.25rem; font-weight: 700;\">").append(size).append("-Way Barter Exchange</h3>\n");
-        sb.append("      <span class=\"badge\" style=\"background: rgba(99, 102, 241, 0.2); color: #a5b4fc;\">").append(size == 2 ? "Direct 2-Way" : size + "-Way Cyclic").append("</span>\n");
+        sb.append("<div class=\"card card-lift\" style=\"padding: 28px; margin-bottom: 24px;\">\n");
+        sb.append("  <div style=\"display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 2px dashed #0D1F1A; padding-bottom: 14px; margin-bottom: 16px;\">\n");
+        sb.append("    <div style=\"display: flex; align-items: center; gap: 10px;\">\n");
+        sb.append("      <span style=\"font-size: 1.3rem; font-weight: 800; color: #0D1F1A;\">#").append(rank).append("</span>\n");
+        sb.append("      <h3 style=\"font-size: 1.3rem; font-weight: 800;\">").append(size).append("-Way Barter Exchange</h3>\n");
+        sb.append("      <span class=\"pill lm\">").append(size == 2 ? "Direct 2-Way" : size + "-Way Cyclic").append("</span>\n");
         sb.append("    </div>\n");
 
         sb.append("    <div style=\"display: flex; align-items: center; gap: 1rem;\">\n");
         sb.append("      <div style=\"text-align: right;\">\n");
-        sb.append("        <div style=\"font-size: 0.78rem; color: var(--text-muted);\">Match Score</div>\n");
-        sb.append("        <strong style=\"color: #10b981; font-size: 1.15rem;\">").append(String.format("%.1f%%", cycle.getScore() * 100)).append("</strong>\n");
+        sb.append("        <div style=\"font-size: 0.78rem; font-weight: 700; color: #4A5B55;\">Match Score</div>\n");
+        sb.append("        <strong style=\"color: #0D1F1A; font-size: 1.25rem;\">").append(String.format("%.1f%%", cycle.getScore() * 100)).append("</strong>\n");
         sb.append("      </div>\n");
 
-        // Action: Propose Swap
         if (!currentUser.isLocked()) {
-            sb.append("      <form action=\"/proposals\" method=\"POST\" style=\"margin:0;\">\n");
+            sb.append("      <form action=\"/proposals\" method=\"POST\" style=\"margin: 0;\">\n");
             sb.append("        <input type=\"hidden\" name=\"signature\" value=\"").append(SecurityUtil.escapeHtml(cycle.getCanonicalSignature())).append("\">\n");
-            sb.append("        <button type=\"submit\" class=\"btn btn-success btn-md\">🤝 Propose Swap</button>\n");
+            sb.append("        <button type=\"submit\" class=\"btn btn-ink btn-sm\">Propose This Swap</button>\n");
             sb.append("      </form>\n");
-        } else {
-            sb.append("      <button class=\"btn btn-outline btn-md\" disabled style=\"opacity:0.5;\">Locked</button>\n");
         }
         sb.append("    </div>\n");
         sb.append("  </div>\n");
 
-        // Inline SVG Diagram (Bonus Feature in PRD F3)
-        sb.append("  <div style=\"margin: 1rem 0; background: rgba(15, 23, 42, 0.5); border-radius: var(--radius-md); padding: 0.5rem;\">\n");
+        // Inline SVG Flow Diagram
         sb.append(SvgGenerator.renderCycleSvg(cycle, currentUser.getId()));
-        sb.append("  </div>\n");
 
-        // Cycle Breakdown Table
-        sb.append("  <div style=\"display: flex; flex-direction: column; gap: 0.5rem;\">\n");
+        // Cycle Steps Summary
+        sb.append("  <div style=\"display: flex; flex-direction: column; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 2px dashed #0D1F1A;\">\n");
         for (SwapLink link : cycle.getLinks()) {
-            boolean isUserLearner = link.getLearner().equals(currentUser);
-            boolean isUserTeacher = link.getTeacher().equals(currentUser);
+            boolean isMe = link.getLearner().equals(currentUser);
+            String avClass = getAvatarClass(link.getLearner().getName());
+            String initial = link.getLearner().getName().substring(0, 1).toUpperCase();
 
-            sb.append("    <div style=\"display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 0.6rem 1rem; border-radius: var(--radius-sm);\">\n");
-            sb.append("      <div style=\"display: flex; align-items: center; gap: 0.6rem;\">\n");
-            sb.append("        <strong style=\"color:").append(isUserLearner ? "#fbbf24" : "#e2e8f0").append(";\">").append(isUserLearner ? "You" : SecurityUtil.escapeHtml(link.getLearner().getName())).append("</strong>\n");
-            sb.append("        <span class=\"text-muted\">learns</span>\n");
-            sb.append("        <span class=\"badge\" style=\"background:rgba(99, 102, 241, 0.25); color:#c7d2fe;\">").append(link.getSkill().getCategory().getEmoji()).append(" ").append(SecurityUtil.escapeHtml(link.getSkill().getName())).append(" (").append(link.getSkill().getLevel().getDisplayName()).append(")</span>\n");
-            sb.append("        <span class=\"text-muted\">from</span>\n");
-            sb.append("        <strong style=\"color:").append(isUserTeacher ? "#fbbf24" : "#e2e8f0").append(";\">").append(isUserTeacher ? "You" : SecurityUtil.escapeHtml(link.getTeacher().getName())).append("</strong>\n");
-            sb.append("      </div>\n");
-            sb.append("      <span style=\"font-size: 0.8rem; color: #94a3b8;\">⭐ ").append(link.getTeacher().getAverageRating()).append("</span>\n");
+            sb.append("    <div style=\"display: flex; align-items: center; gap: 10px; font-size: 15px;\">\n");
+            sb.append("      <span class=\"av ").append(avClass).append("\" style=\"width:28px;height:28px;font-size:12px;\">").append(initial).append("</span>\n");
+            sb.append("      <span><strong style=\"color: ").append(isMe ? "#0D1F1A" : "#33463F").append(";\">")
+              .append(isMe ? "You" : SecurityUtil.escapeHtml(link.getLearner().getName())).append("</strong>");
+            sb.append(" learns <span class=\"pill lm\" style=\"padding:2px 8px;font-size:13px;\">").append(SecurityUtil.escapeHtml(link.getSkill().getName())).append("</span>");
+            sb.append(" from <strong>").append(SecurityUtil.escapeHtml(link.getTeacher().getName())).append("</strong></span>\n");
             sb.append("    </div>\n");
         }
         sb.append("  </div>\n");
@@ -931,42 +1292,32 @@ public class HtmlRenderer {
     }
 
     private static String renderAlmostMatchCard(AlmostMatchFinder.Opportunity opp) {
-        Skill skill = opp.getSuggestedSkill();
+        String teacher = opp.getSampleCycles().isEmpty() ? "Community" : opp.getSampleCycles().get(0).getLinks().get(0).getTeacher().getName();
         return """
-        <div class="glass-card" style="border-color: rgba(251, 191, 36, 0.3);">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
-            <div>
-              <span style="font-size: 1.5rem;">%s</span>
-              <h3 style="font-size: 1.15rem; font-weight: 700; margin-top: 0.25rem;">%s</h3>
-              <span class="badge" style="background: rgba(255,255,255,0.06); font-size: 0.75rem; color: #94a3b8;">%s</span>
-            </div>
-            <span class="badge" style="background: #fbbf24; color: #000; font-weight: 700;">+%d Swaps</span>
+        <div class="card card-lift" style="padding: 24px; border: 2px dashed #0D1F1A; background: #fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <strong style="font-size:18px;">%s</strong>
+            <span class="pill lm">Unlocks %d Swaps</span>
           </div>
-          <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1.25rem;">
-            If you also want to learn <strong>%s</strong>, <strong>%d more multi-way swaps</strong> open up for you immediately!
-          </p>
-          <form action="/profile/skills/add" method="POST">
+          <p style="font-size:14px; color:#33463F; margin-bottom:14px;">Offered by <b>%s</b>. Adding this to your learning list immediately completes a trade cycle!</p>
+          <form action="/profile/skill/add" method="POST">
             <input type="hidden" name="type" value="wants">
             <input type="hidden" name="name" value="%s">
-            <input type="hidden" name="category" value="%s">
+            <input type="hidden" name="category" value="TECH">
             <input type="hidden" name="level" value="BEGINNER">
-            <button type="submit" class="btn btn-outline btn-sm" style="width: 100%%; border-color: #fbbf24; color: #fbbf24;">+ Add to My Wants</button>
+            <button type="submit" class="btn btn-ghost btn-sm" style="width:100%%;">+ Add to Wanted Skills</button>
           </form>
         </div>
         """.formatted(
-            skill.getCategory().getEmoji(),
-            SecurityUtil.escapeHtml(skill.getName()),
-            skill.getCategory().getDisplayName(),
+            SecurityUtil.escapeHtml(opp.getSuggestedSkill().getName()),
             opp.getUnlockedCyclesCount(),
-            SecurityUtil.escapeHtml(skill.getName()),
-            opp.getUnlockedCyclesCount(),
-            SecurityUtil.escapeHtml(skill.getName()),
-            skill.getCategory().name()
+            SecurityUtil.escapeHtml(teacher),
+            SecurityUtil.escapeHtml(opp.getSuggestedSkill().getName())
         );
     }
 
     // =========================================================================
-    // Page: Proposals (F4, F5, F6)
+    // Page: Proposals
     // =========================================================================
 
     public static String renderProposals(Member currentUser, List<SwapProposal> proposals) {
@@ -974,18 +1325,18 @@ public class HtmlRenderer {
 
         sb.append("<div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;\">\n");
         sb.append("  <div>\n");
-        sb.append("    <h1 style=\"font-size: 2.2rem; font-weight: 800;\">🤝 Swap Proposals</h1>\n");
-        sb.append("    <p class=\"text-muted\">Track active proposals, mutual acceptances, and confidential contact reveals.</p>\n");
+        sb.append("    <h1 style=\"font-size: 2.4rem; font-weight: 800;\">🤝 Swap Proposals</h1>\n");
+        sb.append("    <p style=\"color: #33463F; font-size: 1.05rem;\">Track active barter proposals, mutual consensus, and confidential contact reveals.</p>\n");
         sb.append("  </div>\n");
-        sb.append("  <a href=\"/swaps\" class=\"btn btn-primary btn-md\">⚡ Find New Swaps</a>\n");
+        sb.append("  <a href=\"/swaps\" class=\"btn btn-lime btn-md\">⚡ Find New Swaps</a>\n");
         sb.append("</div>\n");
 
         if (proposals.isEmpty()) {
-            sb.append("<div class=\"glass-card\" style=\"text-align: center; padding: 3.5rem 1.5rem;\">\n");
+            sb.append("<div class=\"card\" style=\"text-align: center; padding: 48px 24px;\">\n");
             sb.append("  <div style=\"font-size: 3rem; margin-bottom: 1rem;\">📭</div>\n");
-            sb.append("  <h3 style=\"font-size: 1.35rem; margin-bottom: 0.5rem;\">No Proposals Yet</h3>\n");
-            sb.append("  <p class=\"text-muted\" style=\"max-width: 480px; margin: 0 auto 1.5rem auto;\">You haven't initiated or received any swap proposals. Head to Find Swaps to propose your first exchange!</p>\n");
-            sb.append("  <a href=\"/swaps\" class=\"btn btn-primary btn-md\">Browse Available Matches</a>\n");
+            sb.append("  <h3 style=\"font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem;\">No Proposals Yet</h3>\n");
+            sb.append("  <p style=\"color: #4A5B55; max-width: 480px; margin: 0 auto 1.5rem auto;\">You haven't initiated or received any swap proposals. Head to Find Swaps to propose your first circular trade!</p>\n");
+            sb.append("  <a href=\"/swaps\" class=\"btn btn-ink btn-md\">Browse Available Matches</a>\n");
             sb.append("</div>\n");
             return sb.toString();
         }
@@ -1003,150 +1354,99 @@ public class HtmlRenderer {
         ResponseStatus myResponse = p.getResponseFor(currentUser.getId());
         boolean isInitiator = p.getInitiatorMemberId().equalsIgnoreCase(currentUser.getId());
 
-        sb.append("<div class=\"glass-card\" style=\"margin-bottom: 1.75rem; border-color: ").append(status == ProposalStatus.ACTIVE ? "rgba(16, 185, 129, 0.4)" : "var(--border-color)").append(";\">\n");
+        String stCls = status == ProposalStatus.ACTIVE ? "yes" : (status == ProposalStatus.CANCELLED ? "no" : "wait");
+
+        sb.append("<div class=\"card\" style=\"margin-bottom: 24px; padding: 32px;\">\n");
 
         // Header
-        sb.append("  <div style=\"display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.25rem;\">\n");
-        sb.append("    <div style=\"display: flex; align-items: center; gap: 0.75rem;\">\n");
-        sb.append("      <span class=\"badge\" style=\"background: ").append(status.getColor()).append("; color: #fff;\">").append(status.getIcon()).append(" ").append(status.getLabel()).append("</span>\n");
-        sb.append("      <span style=\"font-size: 0.85rem; color: var(--text-dim);\">Proposal #").append(SecurityUtil.escapeHtml(p.getId())).append("</span>\n");
+        sb.append("  <div style=\"display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-bottom: 2px dashed #0D1F1A; padding-bottom: 16px; margin-bottom: 20px;\">\n");
+        sb.append("    <div style=\"display: flex; align-items: center; gap: 10px;\">\n");
+        sb.append("      <h2 style=\"font-size: 24px; font-weight: 800;\">").append(p.getCycle().size()).append("-way swap proposal</h2>\n");
+        sb.append("      <span class=\"st ").append(stCls).append("\">").append(status.getLabel()).append("</span>\n");
         if (isInitiator) {
-            sb.append("      <span class=\"badge\" style=\"background: rgba(99, 102, 241, 0.2); color: #a5b4fc;\">Created by You</span>\n");
+            sb.append("      <span class=\"pill lm\">Created by You</span>\n");
         }
         sb.append("    </div>\n");
 
-        // 48h Expiration Countdown
+        // Countdown or status text
         long remainingMs = Math.max(0, p.getExpiresAt() - System.currentTimeMillis());
         long hoursLeft = remainingMs / (1000 * 60 * 60);
         long minsLeft = (remainingMs / (1000 * 60)) % 60;
 
         if (status == ProposalStatus.PENDING) {
-            sb.append("    <div style=\"font-size: 0.85rem; color: #f59e0b;\">⏳ Expires in <strong>").append(hoursLeft).append("h ").append(minsLeft).append("m</strong></div>\n");
+            sb.append("    <div style=\"font-size: 14px; font-weight: 700; color: #4A5B55;\">⏳ Expires in <b>").append(hoursLeft).append("h ").append(minsLeft).append("m</b> if not all accept</div>\n");
         } else if (status == ProposalStatus.ACTIVE) {
-            sb.append("    <div style=\"font-size: 0.85rem; color: #10b981;\">🚀 Barter Sessions in Progress!</div>\n");
+            sb.append("    <div style=\"font-size: 14px; font-weight: 700; color: #0D1F1A; background:#CDF23A; padding:4px 12px; border-radius:999px;\">🚀 100% Consensus Reached!</div>\n");
         }
         sb.append("  </div>\n");
 
-        // Participants Acceptance Status Bar
-        sb.append("  <div style=\"margin-bottom: 1.25rem;\">\n");
-        sb.append("    <div style=\"font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem;\">Mutual Consensus Checklist (All must accept):</div>\n");
-        sb.append("    <div style=\"display: flex; gap: 0.75rem; flex-wrap: wrap;\">\n");
-
-        for (Member m : p.getCycle().getMembers()) {
+        // Participants Cards (grid of 3)
+        sb.append("  <div style=\"display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 20px;\">\n");
+        for (SwapLink link : p.getCycle().getLinks()) {
+            Member m = link.getLearner();
             ResponseStatus resp = p.getResponseFor(m.getId());
             boolean isMe = m.equals(currentUser);
+            String avClass = getAvatarClass(m.getName());
+            String initial = m.getName().substring(0, 1).toUpperCase();
+            String respCls = resp == ResponseStatus.ACCEPTED ? "yes" : (resp == ResponseStatus.DECLINED ? "no" : "wait");
+            String respText = resp == ResponseStatus.ACCEPTED ? "Accepted" : (resp == ResponseStatus.DECLINED ? "Declined" : (isMe ? "Waiting for you" : "Pending"));
 
-            sb.append("      <div style=\"display: flex; align-items: center; gap: 0.4rem; background: rgba(15, 23, 42, 0.6); padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);\">\n");
-            sb.append("        <span style=\"font-size: 0.9rem;\">").append(resp != null ? resp.getIcon() : "⏳").append("</span>\n");
-            sb.append("        <strong style=\"font-size: 0.85rem; color: ").append(isMe ? "#fbbf24" : "#e2e8f0").append(";\">").append(isMe ? "You" : SecurityUtil.escapeHtml(m.getName())).append("</strong>\n");
-            sb.append("        <span style=\"font-size: 0.75rem; color: ").append(resp != null ? resp.getColor() : "#94a3b8").append(";\">(").append(resp != null ? resp.getLabel() : "Pending").append(")</span>\n");
+            // Contact details reveal check
+            String contactInfo;
+            if (isMe) {
+                contactInfo = status == ProposalStatus.ACTIVE ? "Shared with your trade circle" : "Your own details";
+            } else if (status == ProposalStatus.ACTIVE) {
+                contactInfo = SecurityUtil.escapeHtml(m.getContact());
+            } else {
+                contactInfo = "Hidden until all accept";
+            }
+
+            sb.append("    <div style=\"flex: 1 1 260px; min-width: 0; border: 2px solid #0D1F1A; border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #F1F4EF;\">\n");
+            sb.append("      <div style=\"display: flex; align-items: center; justify-content: space-between;\">\n");
+            sb.append("        <span style=\"display: flex; align-items: center; gap: 8px;\">\n");
+            sb.append("          <span class=\"av ").append(avClass).append("\">").append(initial).append("</span>\n");
+            sb.append("          <b style=\"font-size: 17px;\">").append(isMe ? "You (" + m.getName() + ")" : SecurityUtil.escapeHtml(m.getName())).append("</b>\n");
+            sb.append("        </span>\n");
+            sb.append("        <span class=\"st ").append(respCls).append("\">").append(respText).append("</span>\n");
             sb.append("      </div>\n");
+            sb.append("      <div style=\"font-size: 14px; color: #33463F;\">learns <span class=\"pill lm\" style=\"padding:2px 8px;font-size:12px;\">").append(SecurityUtil.escapeHtml(link.getSkill().getName())).append("</span> from <b>").append(SecurityUtil.escapeHtml(link.getTeacher().getName())).append("</b></div>\n");
+            sb.append("      <div style=\"font-size: 13px; color: #4A5B55; margin-top: auto;\">Contact: <b style=\"color: #0D1F1A;\">").append(contactInfo).append("</b></div>\n");
+            sb.append("    </div>\n");
         }
-        sb.append("    </div>\n");
         sb.append("  </div>\n");
 
-        // Action Buttons for Current User
+        // Action Controls
         if (status == ProposalStatus.PENDING) {
-            sb.append("  <div style=\"display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap;\">\n");
+            sb.append("  <div style=\"display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding-top: 16px; border-top: 2px dashed #0D1F1A;\">\n");
             if (myResponse == ResponseStatus.PENDING) {
-                sb.append("    <form action=\"/proposals/").append(p.getId()).append("/accept\" method=\"POST\">\n");
-                sb.append("      <button type=\"submit\" class=\"btn btn-success btn-md\">✅ Accept Swap Proposal</button>\n");
+                sb.append("    <form action=\"/proposals/respond\" method=\"POST\" style=\"display: inline;\">\n");
+                sb.append("      <input type=\"hidden\" name=\"proposalId\" value=\"").append(SecurityUtil.escapeHtml(p.getId())).append("\">\n");
+                sb.append("      <input type=\"hidden\" name=\"action\" value=\"accept\">\n");
+                sb.append("      <button type=\"submit\" class=\"btn btn-ink\">Accept swap</button>\n");
                 sb.append("    </form>\n");
-                sb.append("    <form action=\"/proposals/").append(p.getId()).append("/decline\" method=\"POST\">\n");
-                sb.append("      <button type=\"submit\" class=\"btn btn-danger btn-md\">❌ Decline & Cancel</button>\n");
+
+                sb.append("    <form action=\"/proposals/respond\" method=\"POST\" style=\"display: inline;\">\n");
+                sb.append("      <input type=\"hidden\" name=\"proposalId\" value=\"").append(SecurityUtil.escapeHtml(p.getId())).append("\">\n");
+                sb.append("      <input type=\"hidden\" name=\"action\" value=\"decline\">\n");
+                sb.append("      <button type=\"submit\" class=\"btn btn-ghost\" onclick=\"return confirm('Decline this proposal? It will cancel the trade for all students.');\">Decline</button>\n");
                 sb.append("    </form>\n");
-            } else if (isInitiator) {
-                sb.append("    <form action=\"/proposals/").append(p.getId()).append("/cancel\" method=\"POST\">\n");
-                sb.append("      <button type=\"submit\" class=\"btn btn-outline btn-md\" style=\"color: #ef4444;\">Cancel My Proposal</button>\n");
-                sb.append("    </form>\n");
+            } else if (myResponse == ResponseStatus.ACCEPTED) {
+                sb.append("    <span class=\"st yes\">✓ You Accepted</span>\n");
+                sb.append("    <span style=\"font-size: 14px; color: #4A5B55;\">Waiting for fellow students to respond...</span>\n");
             }
             sb.append("  </div>\n");
         } else if (status == ProposalStatus.ACTIVE) {
-            sb.append("  <div style=\"display: flex; gap: 0.75rem; margin-bottom: 1.25rem; flex-wrap: wrap;\">\n");
-            sb.append("    <form action=\"/proposals/").append(p.getId()).append("/complete\" method=\"POST\">\n");
-            sb.append("      <button type=\"submit\" class=\"btn btn-primary btn-md\">🎉 Mark Swap Completed & Enable Ratings</button>\n");
-            sb.append("    </form>\n");
+            sb.append("  <div style=\"padding: 16px 20px; border-radius: 16px; background: #CDF23A; border: 2px solid #0D1F1A; font-weight: 700; color: #0D1F1A;\">\n");
+            sb.append("    🎉 All students have accepted! Contact info is revealed above. You can now coordinate lessons directly.\n");
             sb.append("  </div>\n");
-        }
-
-        // Contact Reveal Box (Feature F5)
-        sb.append("  <div style=\"background: rgba(15, 23, 42, 0.75); border-radius: var(--radius-sm); padding: 1.25rem; border: 1px solid var(--border-color);\">\n");
-        sb.append("    <div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;\">\n");
-        sb.append("      <div style=\"font-size: 0.95rem; font-weight: 700;\">📬 Swap Contacts & Session Logistics</div>\n");
-
-        if (p.areContactsRevealed()) {
-            sb.append("      <span class=\"badge\" style=\"background: #10b981; color: #fff;\">🔓 Contacts Revealed!</span>\n");
-        } else {
-            sb.append("      <span class=\"badge\" style=\"background: rgba(255, 255, 255, 0.08); color: #94a3b8;\">🔒 Hidden until all accept</span>\n");
-        }
-        sb.append("    </div>\n");
-
-        if (p.areContactsRevealed()) {
-            sb.append("    <div class=\"grid-3\" style=\"gap: 0.75rem;\">\n");
-            for (SwapLink link : p.getCycle().getLinks()) {
-                Member teacher = link.getTeacher();
-                boolean isTeacherMe = teacher.equals(currentUser);
-
-                sb.append("      <div style=\"background: rgba(255,255,255,0.04); padding: 0.75rem; border-radius: var(--radius-sm); border: 1px solid rgba(16, 185, 129, 0.2);\">\n");
-                sb.append("        <strong style=\"color: ").append(isTeacherMe ? "#fbbf24" : "#6ee7b7").append(";\">").append(isTeacherMe ? "Your Contact Info" : SecurityUtil.escapeHtml(teacher.getName())).append("</strong>\n");
-                sb.append("        <div style=\"font-size: 0.85rem; margin-top: 0.25rem; color: #f8fafc;\"><code>").append(SecurityUtil.escapeHtml(teacher.getContact())).append("</code></div>\n");
-                sb.append("        <div style=\"font-size: 0.78rem; color: #94a3b8; margin-top: 0.25rem;\">Teaches: ").append(SecurityUtil.escapeHtml(link.getSkill().getName())).append("</div>\n");
-                sb.append("        <div style=\"font-size: 0.75rem; color: #a5b4fc;\">Availability: ").append(SecurityUtil.escapeHtml(teacher.getAvailabilityNote())).append("</div>\n");
-                sb.append("      </div>\n");
-            }
-            sb.append("    </div>\n");
-        } else {
-            sb.append("    <p class=\"text-dim\" style=\"font-size: 0.85rem;\">For student safety and anti-spam protection, phone numbers and email contacts remain confidential until every member in this cycle confirms their acceptance.</p>\n");
-        }
-        sb.append("  </div>\n");
-
-        // Rating Section (Feature F6) if completed
-        if (status == ProposalStatus.COMPLETED) {
-            SwapLink myLink = p.getCycle().getLinkForLearner(currentUser.getId());
-            if (myLink != null) {
-                Member myTeacher = myLink.getTeacher();
-                sb.append(renderRatingForm(p.getId(), currentUser.getId(), myTeacher));
-            }
+        } else if (status == ProposalStatus.CANCELLED) {
+            sb.append("  <div style=\"padding: 16px 20px; border-radius: 16px; background: #F7A58E; border: 2px solid #0D1F1A; font-weight: 700; color: #0D1F1A;\">\n");
+            sb.append("    ✕ Proposal was declined or cancelled. All students are freed to match in new cycles.\n");
+            sb.append("  </div>\n");
         }
 
         sb.append("</div>\n");
         return sb.toString();
-    }
-
-    private static String renderRatingForm(String proposalId, String learnerId, Member teacher) {
-        return """
-        <div style="margin-top: 1.25rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: var(--radius-sm); padding: 1.25rem;">
-          <h4 style="font-size: 1.05rem; font-weight: 700; color: #c4b5fd; margin-bottom: 0.4rem;">⭐ Rate Your Teacher: %s</h4>
-          <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 1rem;">Leave feedback for your barter session. Your peer review directly influences future cycle matching scores!</p>
-
-          <form action="/ratings" method="POST" style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
-            <input type="hidden" name="proposalId" value="%s">
-            <input type="hidden" name="teacherId" value="%s">
-            
-            <div>
-              <label class="form-label">Score (1-5 Stars)</label>
-              <select name="score" class="form-control" style="width: 140px;">
-                <option value="5">⭐⭐⭐⭐⭐ (5.0)</option>
-                <option value="4">⭐⭐⭐⭐ (4.0)</option>
-                <option value="3">⭐⭐⭐ (3.0)</option>
-                <option value="2">⭐⭐ (2.0)</option>
-                <option value="1">⭐ (1.0)</option>
-              </select>
-            </div>
-
-            <div style="flex: 1; min-width: 220px;">
-              <label class="form-label">Review / Feedback</label>
-              <input type="text" name="feedback" class="form-control" placeholder="Great explanations and very patient mentor!">
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-md">Submit Teacher Rating</button>
-          </form>
-        </div>
-        """.formatted(
-            SecurityUtil.escapeHtml(teacher.getName()),
-            proposalId,
-            teacher.getId()
-        );
     }
 
     // =========================================================================
@@ -1158,55 +1458,76 @@ public class HtmlRenderer {
 
         sb.append("<div style=\"display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;\">\n");
         sb.append("  <div>\n");
-        sb.append("    <h1 style=\"font-size: 2.2rem; font-weight: 800;\">🌍 SkillSwap Community</h1>\n");
-        sb.append("    <p class=\"text-muted\">Discover fellow students, explore skills offered and needed, and see what the community is learning.</p>\n");
+        sb.append("    <h1 style=\"font-size: 2.4rem; font-weight: 800;\">🌍 SkillSwap Community</h1>\n");
+        sb.append("    <p style=\"color: #33463F; font-size: 1.05rem;\">Discover fellow students, explore skills offered and needed, and see who is learning what.</p>\n");
         sb.append("  </div>\n");
-
+        if (currentUser != null) {
+            sb.append("  <a href=\"/swaps\" class=\"btn btn-lime btn-md\">⚡ View My Matched Swaps</a>\n");
+        } else {
+            sb.append("  <a href=\"/signup\" class=\"btn btn-lime btn-md\">Join Community</a>\n");
+        }
         sb.append("</div>\n");
 
         sb.append("<div class=\"grid-3\">\n");
         for (Member m : members) {
             boolean isMe = currentUser != null && m.equals(currentUser);
+            String avClass = getAvatarClass(m.getName());
+            String initial = m.getName().substring(0, 1).toUpperCase();
 
-            sb.append("<div class=\"glass-card\" style=\"border-color: ").append(isMe ? "#6366f1" : "var(--border-color)").append(";\">\n");
-            sb.append("  <div style=\"display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;\">\n");
-            sb.append("    <div>\n");
-            sb.append("      <h3 style=\"font-size: 1.2rem; font-weight: 700;\">").append(SecurityUtil.escapeHtml(m.getName())).append(isMe ? " <span style=\"color:#fbbf24;font-size:0.85rem;\">(You)</span>" : "").append("</h3>\n");
-            sb.append("      <div style=\"font-size: 0.8rem; color: #fbbf24; margin-top: 0.2rem;\">⭐ ").append(m.getAverageRating()).append(" / 5.0 (").append(m.getRatingCount()).append(" reviews)</div>\n");
+            sb.append("<div class=\"card card-lift\" style=\"padding: 24px; display: flex; flex-direction: column; gap: 14px;\">\n");
+            sb.append("  <div style=\"display: flex; justify-content: space-between; align-items: flex-start;\">\n");
+            sb.append("    <div style=\"display: flex; align-items: center; gap: 12px;\">\n");
+            sb.append("      <span class=\"av ").append(avClass).append("\">").append(initial).append("</span>\n");
+            sb.append("      <div>\n");
+            sb.append("        <h3 style=\"font-size: 1.25rem; font-weight: 800;\">").append(SecurityUtil.escapeHtml(m.getName())).append(isMe ? " <span style=\"font-size:0.8rem;color:#3A3FD8;\">(You)</span>" : "").append("</h3>\n");
+            sb.append("        <div style=\"font-size: 0.85rem; color: #4A5B55;\">⭐ ").append(m.getAverageRating()).append(" / 5.0 (").append(m.getRatingCount()).append(" reviews)</div>\n");
+            sb.append("      </div>\n");
             sb.append("    </div>\n");
+
             if (m.isLocked()) {
-                sb.append("    <span class=\"badge\" style=\"background:rgba(239,68,68,0.2);color:#fca5a5;\">Locked</span>\n");
+                sb.append("    <span class=\"st wait\">Locked</span>\n");
             } else {
-                sb.append("    <span class=\"badge\" style=\"background:rgba(16,185,129,0.2);color:#6ee7b7;\">Available</span>\n");
+                sb.append("    <span class=\"st yes\">Available</span>\n");
             }
             sb.append("  </div>\n");
 
             if (m.getBio() != null && !m.getBio().isEmpty()) {
-                sb.append("  <p class=\"text-muted\" style=\"font-size: 0.88rem; margin-bottom: 1rem;\">").append(SecurityUtil.escapeHtml(m.getBio())).append("</p>\n");
+                sb.append("  <p style=\"font-size: 0.9rem; color: #33463F; margin: 0;\">").append(SecurityUtil.escapeHtml(m.getBio())).append("</p>\n");
             }
 
             // Teaches chips
-            sb.append("  <div style=\"margin-bottom: 0.75rem;\">\n");
-            sb.append("    <div style=\"font-size: 0.78rem; font-weight: 700; color: #6ee7b7; text-transform: uppercase; margin-bottom: 0.35rem;\">Teaches</div>\n");
-            sb.append("    <div style=\"display: flex; flex-wrap: wrap; gap: 0.35rem;\">\n");
-            for (Skill s : m.getTeaches()) {
-                sb.append("      <span class=\"badge\" style=\"background: rgba(16, 185, 129, 0.15); color: #6ee7b7;\">").append(s.getCategory().getEmoji()).append(" ").append(SecurityUtil.escapeHtml(s.getName())).append("</span>\n");
+            sb.append("  <div>\n");
+            sb.append("    <span style=\"font-size: 11px; font-weight: 700; color: #4A5B55; display: block; margin-bottom: 4px;\">TEACHES</span>\n");
+            sb.append("    <div style=\"display: flex; flex-wrap: wrap; gap: 4px;\">\n");
+            if (m.getTeaches().isEmpty()) {
+                sb.append("      <span style=\"font-size:12px;color:#94a3b8;\">None listed</span>\n");
+            } else {
+                for (Skill s : m.getTeaches()) {
+                    sb.append("      <span class=\"pill lm\" style=\"font-size:12px;padding:2px 8px;\">").append(SecurityUtil.escapeHtml(s.getName())).append("</span>\n");
+                }
             }
             sb.append("    </div>\n");
             sb.append("  </div>\n");
 
             // Wants chips
-            sb.append("  <div style=\"margin-bottom: 1rem;\">\n");
-            sb.append("    <div style=\"font-size: 0.78rem; font-weight: 700; color: #93c5fd; text-transform: uppercase; margin-bottom: 0.35rem;\">Wants to Learn</div>\n");
-            sb.append("    <div style=\"display: flex; flex-wrap: wrap; gap: 0.35rem;\">\n");
-            for (Skill s : m.getWants()) {
-                sb.append("      <span class=\"badge\" style=\"background: rgba(59, 130, 246, 0.15); color: #93c5fd;\">").append(s.getCategory().getEmoji()).append(" ").append(SecurityUtil.escapeHtml(s.getName())).append("</span>\n");
+            sb.append("  <div>\n");
+            sb.append("    <span style=\"font-size: 11px; font-weight: 700; color: #4A5B55; display: block; margin-bottom: 4px;\">WANTS</span>\n");
+            sb.append("    <div style=\"display: flex; flex-wrap: wrap; gap: 4px;\">\n");
+            if (m.getWants().isEmpty()) {
+                sb.append("      <span style=\"font-size:12px;color:#94a3b8;\">None listed</span>\n");
+            } else {
+                for (Skill s : m.getWants()) {
+                    sb.append("      <span class=\"pill\" style=\"font-size:12px;padding:2px 8px;\">").append(SecurityUtil.escapeHtml(s.getName())).append("</span>\n");
+                }
             }
             sb.append("    </div>\n");
             sb.append("  </div>\n");
 
-            sb.append("  <div style=\"font-size: 0.8rem; color: var(--text-dim); border-top: 1px solid var(--border-color); padding-top: 0.6rem;\">\n");
-            sb.append("    ⏰ ").append(m.getWeeklyAvailabilityHours()).append(" hrs/wk &bull; ").append(SecurityUtil.escapeHtml(m.getAvailabilityNote())).append("\n");
+            sb.append("  <div style=\"margin-top: auto; padding-top: 10px; border-top: 1px dashed #0D1F1A; display: flex; justify-content: space-between; align-items: center;\">\n");
+            sb.append("    <span style=\"font-size: 12px; color: #4A5B55;\">⏱️ ").append(m.getWeeklyAvailabilityHours()).append(" hrs/wk</span>\n");
+            if (!isMe && currentUser != null && !currentUser.isLocked()) {
+                sb.append("    <a href=\"/swaps\" class=\"btn btn-ink btn-sm\" style=\"min-height:30px;padding:0 12px;font-size:12px;\">Find Match</a>\n");
+            }
             sb.append("  </div>\n");
 
             sb.append("</div>\n");
@@ -1214,5 +1535,16 @@ public class HtmlRenderer {
         sb.append("</div>\n");
 
         return sb.toString();
+    }
+
+    private static String getAvatarClass(String name) {
+        if (name == null) return "av-Asha";
+        String n = name.trim().toLowerCase();
+        if (n.startsWith("asha")) return "av-Asha";
+        if (n.startsWith("ravi")) return "av-Ravi";
+        if (n.startsWith("meena")) return "av-Meena";
+        if (n.startsWith("kabir")) return "av-Kabir";
+        if (n.startsWith("neha")) return "av-Neha";
+        return "av-Asha";
     }
 }

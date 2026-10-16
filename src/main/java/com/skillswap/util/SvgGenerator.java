@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Generates inline SVG diagrams illustrating barter swap cycles (2-way, 3-way, 4-way).
- * Highlights the current user, shows direction of skill flow, and visualizes member nodes.
+ * Matches the SkillSwap high-contrast neo-brutalist theme (ink, lime, pill tokens).
  */
 public final class SvgGenerator {
 
@@ -18,7 +18,7 @@ public final class SvgGenerator {
      * Renders a responsive SVG diagram for a swap cycle.
      *
      * @param cycle the swap cycle to illustrate
-     * @param currentUserId the ID of the logged in user (highlighted in gold/cyan)
+     * @param currentUserId the ID of the logged in user (highlighted in electric lime)
      * @return SVG XML string ready for inline embedding in HTML
      */
     public static String renderCycleSvg(SwapCycle cycle, String currentUserId) {
@@ -56,22 +56,15 @@ public final class SvgGenerator {
 
         StringBuilder sb = new StringBuilder();
         sb.append("<svg viewBox=\"0 0 ").append(width).append(" ").append(height)
-          .append("\" class=\"swap-cycle-svg\" xmlns=\"http://www.w3.org/2000/svg\">\n");
+          .append("\" class=\"swap-cycle-svg\" xmlns=\"http://www.w3.org/2000/svg\" style=\"display:block;margin:1rem auto;max-width:100%;\">\n");
 
-        // Definitions: Gradients, Markers, Filters
+        // Definitions: Arrowhead Marker
         sb.append("""
           <defs>
-            <linearGradient id="linkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#6366f1" />
-              <stop offset="100%" stop-color="#10b981" />
-            </linearGradient>
             <marker id="arrowHead" viewBox="0 0 10 10" refX="24" refY="5"
                     markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981" />
+              <path d="M 0 1 L 10 5 L 0 9 z" fill="#0D1F1A" />
             </marker>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#6366f1" flood-opacity="0.35"/>
-            </filter>
           </defs>
         """);
 
@@ -93,7 +86,6 @@ public final class SvgGenerator {
             } else {
                 double midX = (x1 + x2) / 2;
                 double midY = (y1 + y2) / 2;
-                // Curve outwards slightly from center
                 cx = midX + (midX - centerX) * 0.35;
                 cy = midY + (midY - centerY) * 0.35;
             }
@@ -102,7 +94,7 @@ public final class SvgGenerator {
             sb.append("<path d=\"M ").append(x1).append(" ").append(y1)
               .append(" Q ").append(cx).append(" ").append(cy)
               .append(" ").append(x2).append(" ").append(y2)
-              .append("\" fill=\"none\" stroke=\"url(#linkGrad)\" stroke-width=\"3\" ")
+              .append("\" fill=\"none\" stroke=\"#0D1F1A\" stroke-width=\"2.5\" ")
               .append("stroke-dasharray=\"6 3\" marker-end=\"url(#arrowHead)\" />\n");
 
             // Skill pill badge at the curve peak
@@ -113,9 +105,9 @@ public final class SvgGenerator {
             sb.append("<g transform=\"translate(").append(cx - pillWidth / 2.0).append(",")
               .append(cy - pillHeight / 2.0).append(")\">\n")
               .append("<rect width=\"").append(pillWidth).append("\" height=\"").append(pillHeight)
-              .append("\" rx=\"13\" fill=\"#1e293b\" stroke=\"#38bdf8\" stroke-width=\"1.5\" />\n")
-              .append("<text x=\"").append(pillWidth / 2.0).append("\" y=\"17\" fill=\"#f8fafc\" ")
-              .append("font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">")
+              .append("\" rx=\"13\" fill=\"#CDF23A\" stroke=\"#0D1F1A\" stroke-width=\"2\" />\n")
+              .append("<text x=\"").append(pillWidth / 2.0).append("\" y=\"17\" fill=\"#0D1F1A\" ")
+              .append("font-family=\"'DM Sans', sans-serif\" font-size=\"11\" font-weight=\"700\" text-anchor=\"middle\">")
               .append(skillName).append("</text>\n")
               .append("</g>\n");
         }
@@ -127,32 +119,28 @@ public final class SvgGenerator {
             double y = positions[i][1];
             boolean isCurrentUser = currentUserId != null && currentUserId.equalsIgnoreCase(member.getId());
 
-            String nodeColor = isCurrentUser ? "#fbbf24" : "#6366f1";
-            String strokeColor = isCurrentUser ? "#f59e0b" : "#818cf8";
+            String nodeColor = getAvatarColor(member.getName());
             String initials = getInitials(member.getName());
 
             sb.append("<g class=\"svg-node\" transform=\"translate(").append(x).append(",").append(y).append(")\">\n");
 
-            // Outer pulse circle for current user
+            // Outer highlight circle for current user
             if (isCurrentUser) {
-                sb.append("<circle r=\"32\" fill=\"none\" stroke=\"#fbbf24\" stroke-width=\"2\" opacity=\"0.5\" ")
-                  .append("stroke-dasharray=\"4 4\" />\n");
+                sb.append("<circle r=\"32\" fill=\"none\" stroke=\"#0D1F1A\" stroke-width=\"2\" stroke-dasharray=\"4 4\" />\n");
             }
 
             // Node Circle
-            sb.append("<circle r=\"24\" fill=\"#0f172a\" stroke=\"").append(strokeColor)
-              .append("\" stroke-width=\"3\" filter=\"url(#glow)\" />\n");
+            sb.append("<circle r=\"24\" fill=\"").append(nodeColor).append("\" stroke=\"#0D1F1A\" stroke-width=\"2.5\" />\n");
 
             // Initials text
-            sb.append("<text y=\"5\" fill=\"#ffffff\" font-size=\"12\" font-weight=\"700\" text-anchor=\"middle\">")
+            sb.append("<text y=\"5\" fill=\"#0D1F1A\" font-family=\"'Bricolage Grotesque', sans-serif\" font-size=\"14\" font-weight=\"800\" text-anchor=\"middle\">")
               .append(initials).append("</text>\n");
 
             // Name Label below/above node
             double labelY = (y > centerY) ? 42 : -32;
             String displayName = isCurrentUser ? "You (" + member.getName() + ")" : member.getName();
-            sb.append("<text y=\"").append(labelY).append("\" fill=\"")
-              .append(isCurrentUser ? "#fbbf24" : "#e2e8f0")
-              .append("\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">")
+            sb.append("<text y=\"").append(labelY).append("\" fill=\"#0D1F1A\" ")
+              .append("font-family=\"'Bricolage Grotesque', sans-serif\" font-size=\"13\" font-weight=\"700\" text-anchor=\"middle\">")
               .append(SecurityUtil.escapeHtml(displayName)).append("</text>\n");
 
             sb.append("</g>\n");
@@ -160,6 +148,17 @@ public final class SvgGenerator {
 
         sb.append("</svg>\n");
         return sb.toString();
+    }
+
+    private static String getAvatarColor(String name) {
+        if (name == null) return "#CDF23A";
+        String n = name.trim().toLowerCase();
+        if (n.startsWith("asha")) return "#CDF23A";
+        if (n.startsWith("ravi")) return "#C9B8FF";
+        if (n.startsWith("meena")) return "#F7A58E";
+        if (n.startsWith("kabir")) return "#8FD8F2";
+        if (n.startsWith("neha")) return "#FBE08A";
+        return "#CDF23A";
     }
 
     private static String getInitials(String name) {
