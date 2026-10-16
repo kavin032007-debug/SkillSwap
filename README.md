@@ -3,6 +3,8 @@
 > Built with **Pure Java 17+ (OOP)**, standard `com.sun.net.httpserver.HttpServer`, and **zero external runtime dependencies**.  
 > Features algorithmic 2-way, 3-way, and 4-way barter cycle discovery, depth-limited DFS, dynamic inline SVG visualizations, and robust state locking.
 
+🌐 **Live Deployment**: **[https://skillswap-vy46.onrender.com](https://skillswap-vy46.onrender.com)**
+
 ---
 
 ## 🌟 Overview
