@@ -1,0 +1,415 @@
+[
+  {
+    "id": "mem-jin",
+    "name": "Jin",
+    "pinHash": "nVS9GoCxhNmt5YabsLStsqpUJxnzIjgl+0AUAAivSxU=",
+    "pinSalt": "yF3p32nxdsWq86qhEt6Z7w",
+    "contact": "jin@campus.edu",
+    "bio": "Motion designer and YouTuber who wants to master healthy meal prep on a budget.",
+    "weeklyAvailabilityHours": 6,
+    "availabilityNote": "Flexible",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Video Editing",
+        "category": "DESIGN",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Animation",
+        "category": "DESIGN",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Cooking & Baking",
+        "category": "LIFESTYLE",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-fatima",
+    "name": "Fatima",
+    "pinHash": "XpW4uKrfH0OH2qQ0WlxVKhdpvCJMW+AOrxlntxlQBNk=",
+    "pinSalt": "8rhsKcfgptmt4hUznFtp2w",
+    "contact": "fatima@campus.edu",
+    "bio": "Debate team captain coaching public speaking, wanting to learn digital illustration.",
+    "weeklyAvailabilityHours": 5,
+    "availabilityNote": "Monday evenings",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Public Speaking",
+        "category": "BUSINESS",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Marketing",
+        "category": "BUSINESS",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "UI Design",
+        "category": "DESIGN",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-kira",
+    "name": "Kira",
+    "pinHash": "5FZ9DWEvM7LpGOneo5W/8ngDn/cJ0d8sqVfS6admcn8=",
+    "pinSalt": "1USyXqydi4ojDETsRfAUbw",
+    "contact": "kira@campus.edu",
+    "bio": "Certified yoga instructor aiming to build a high-quality video channel.",
+    "weeklyAvailabilityHours": 7,
+    "availabilityNote": "Morning slots",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Yoga & Meditation",
+        "category": "FITNESS_WELLNESS",
+        "level": "ADVANCED"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Video Editing",
+        "category": "DESIGN",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-ian",
+    "name": "Ian",
+    "pinHash": "hGpPvBvugCkstERiJR+JFb5sx0OJWFQol8LjvkAXj0Y=",
+    "pinSalt": "06NI3QA7PDCQoK18IlaDgQ",
+    "contact": "ian@campus.edu",
+    "bio": "Culinary enthusiast offering artisanal baking and nutrition coaching, wanting to play piano.",
+    "weeklyAvailabilityHours": 5,
+    "availabilityNote": "Weekends",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Cooking & Baking",
+        "category": "LIFESTYLE",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Nutrition",
+        "category": "FITNESS_WELLNESS",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Piano",
+        "category": "MUSIC",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-evan",
+    "name": "Evan",
+    "pinHash": "d/ZSVviRtaS1dH4qWbqGKpyt5LueRJLCOzyaPZqiLoo=",
+    "pinSalt": "7eVomjLA0NxaXz1xX7bL_w",
+    "contact": "evan@campus.edu",
+    "bio": "Competitive chess player and math tutor eager to converse in French.",
+    "weeklyAvailabilityHours": 7,
+    "availabilityNote": "Weekends",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Chess",
+        "category": "LIFESTYLE",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Calculus",
+        "category": "ACADEMICS",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "French",
+        "category": "LANGUAGE",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-diana",
+    "name": "Diana",
+    "pinHash": "+X+HXF7kxQqyeDt6lJUZtY8e6W89RfhGIQyHEWqY/fU=",
+    "pinSalt": "E7PGUNehemeeLwsyOXLTnA",
+    "contact": "diana@campus.edu",
+    "bio": "Literature enthusiast and bilingual tutor wanting to analyze literary data.",
+    "weeklyAvailabilityHours": 4,
+    "availabilityNote": "Wednesday & Friday",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "French",
+        "category": "LANGUAGE",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Creative Writing",
+        "category": "ARTS_CRAFTS",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Data Analysis",
+        "category": "ACADEMICS",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-carlos",
+    "name": "Carlos",
+    "pinHash": "oBwlZ/KwtpfgB/VW448bkgxy1gCN3Z3Ck5zUaAddBp4=",
+    "pinSalt": "_of8I8bQlWk9-1VqzOn3Xg",
+    "contact": "carlos@campus.edu",
+    "bio": "Product design junior looking to code my own UI prototypes in Python.",
+    "weeklyAvailabilityHours": 6,
+    "availabilityNote": "Friday & Saturday",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "UI Design",
+        "category": "DESIGN",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Figma",
+        "category": "DESIGN",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Python",
+        "category": "PROGRAMMING",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-meena",
+    "name": "Meena",
+    "pinHash": "d63vdunYxNWE90jATQ7ehM5F6MhocJCuricMiMvahmI=",
+    "pinSalt": "ZCBWAqh2yeecS5uK5dv2fQ",
+    "contact": "meena@campus.edu",
+    "bio": "Visual Arts student and native Spanish speaker who wants to pick up acoustic guitar.",
+    "weeklyAvailabilityHours": 5,
+    "availabilityNote": "Flexible afternoons",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Photography",
+        "category": "DESIGN",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Spanish",
+        "category": "LANGUAGE",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Guitar",
+        "category": "MUSIC",
+        "level": "BEGINNER"
+      },
+      {
+        "name": "Chess",
+        "category": "LIFESTYLE",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": [
+      {
+        "fromMemberId": "mem-ravi",
+        "fromMemberName": "Ravi",
+        "score": 5,
+        "feedback": "Amazing composition techniques!",
+        "timestamp": 1791844097411
+      }
+    ]
+  },
+  {
+    "id": "mem-george",
+    "name": "George",
+    "pinHash": "GlpE2MXU4T5nE/t/qaLhtxdoQKGOnYHyEIql9HgdhF4=",
+    "pinSalt": "8vl2HOQu2ezKBghoxOcEtQ",
+    "contact": "george@campus.edu",
+    "bio": "AI researcher who wants to overcome stage fright and present research confidently.",
+    "weeklyAvailabilityHours": 6,
+    "availabilityNote": "Weekdays after 6pm",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Machine Learning",
+        "category": "PROGRAMMING",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Java",
+        "category": "PROGRAMMING",
+        "level": "ADVANCED"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Public Speaking",
+        "category": "BUSINESS",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-hannah",
+    "name": "Hannah",
+    "pinHash": "kHOn/P3lgj6eExcLXfcZGwlHl/ZLToYY/JZ0SUd0R6s=",
+    "pinSalt": "CAk1CBy62La4OOltrwIk7w",
+    "contact": "hannah@campus.edu",
+    "bio": "Conservatory pianist fascinated by neural networks and generative sound synthesis.",
+    "weeklyAvailabilityHours": 4,
+    "availabilityNote": "Sunday afternoons",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Piano",
+        "category": "MUSIC",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Music Theory",
+        "category": "MUSIC",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Machine Learning",
+        "category": "PROGRAMMING",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": []
+  },
+  {
+    "id": "mem-asha",
+    "name": "Asha",
+    "pinHash": "yl+fPfj/lFUXFZvQTzN02R95g65/RTtV8yo/BqrH17s=",
+    "pinSalt": "ac-9NRq21F4qjK91UXs9mA",
+    "contact": "asha@campus.edu",
+    "bio": "Computer Science sophomore passionate about acoustic guitar and clean code.",
+    "weeklyAvailabilityHours": 6,
+    "availabilityNote": "Weekends & Evenings",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Guitar",
+        "category": "MUSIC",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Python",
+        "category": "PROGRAMMING",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Excel",
+        "category": "BUSINESS",
+        "level": "BEGINNER"
+      },
+      {
+        "name": "UI Design",
+        "category": "DESIGN",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": [
+      {
+        "fromMemberId": "mem-carlos",
+        "fromMemberName": "Carlos",
+        "score": 5,
+        "feedback": "Incredible guitar teacher!",
+        "timestamp": 1792007697410
+      }
+    ]
+  },
+  {
+    "id": "mem-ravi",
+    "name": "Ravi",
+    "pinHash": "KomlLrkqQ0jBFzuyAsKsTSGedz25vUEjrem0d5zdvLY=",
+    "pinSalt": "UOd5c-gFiYkAEjZo-MGiAA",
+    "contact": "ravi@campus.edu",
+    "bio": "Finance major who loves spreadsheets, automation, and outdoor photography.",
+    "weeklyAvailabilityHours": 8,
+    "availabilityNote": "Tuesday & Thursday evenings",
+    "lockedInProposalId": null,
+    "teaches": [
+      {
+        "name": "Excel",
+        "category": "BUSINESS",
+        "level": "ADVANCED"
+      },
+      {
+        "name": "Data Analysis",
+        "category": "ACADEMICS",
+        "level": "INTERMEDIATE"
+      }
+    ],
+    "wants": [
+      {
+        "name": "Photography",
+        "category": "DESIGN",
+        "level": "BEGINNER"
+      },
+      {
+        "name": "Spanish",
+        "category": "LANGUAGE",
+        "level": "BEGINNER"
+      }
+    ],
+    "ratings": [
+      {
+        "fromMemberId": "mem-asha",
+        "fromMemberName": "Asha",
+        "score": 5,
+        "feedback": "Turned complex VLOOKUP into child's play.",
+        "timestamp": 1791921297411
+      },
+      {
+        "fromMemberId": "mem-asha",
+        "fromMemberName": "Asha",
+        "score": 5,
+        "feedback": "Ravi explained pivot tables with crystal clarity!",
+        "timestamp": 1792094196939
+      }
+    ]
+  }
+]
