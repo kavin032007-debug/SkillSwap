@@ -42,8 +42,5 @@ public class Router {
 
         // Community Members
         server.createContext("/members", new MemberDirectoryHandler(memberRepo, sessionManager));
-
-        // Demo Data Reset
-        server.createContext("/demo/reset", new DemoDataHandler(memberRepo, proposalRepo));
     }
 }

@@ -39,9 +39,6 @@ public class Main {
         MemberRepository memberRepository = new FilePersistedMemberRepository(membersFile);
         ProposalRepository proposalRepository = new FilePersistedProposalRepository(proposalsFile, memberRepository);
 
-        // Seed demo members if database is empty on first run
-        DemoDataSeeder.seedIfEmpty(memberRepository, proposalRepository);
-
         // Core business services
         AuthService authService = new AuthService(memberRepository);
         SessionManager sessionManager = new SessionManager();
@@ -59,7 +56,7 @@ public class Main {
             System.out.println("   🔄 SkillSwap - Money-Free Skill Barter Marketplace (Pure Java) ");
             System.out.println("==================================================================");
             System.out.println("   Server successfully running at: http://localhost:" + port);
-            System.out.println("   Try Asha's 3-way swap (PIN: 1234): http://localhost:" + port + "/login");
+            System.out.println("   Join free / explore community: http://localhost:" + port + "/signup");
             System.out.println("   Registered members: " + memberRepository.count());
             System.out.println("   Press Ctrl+C to stop server.");
             System.out.println("==================================================================");

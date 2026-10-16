@@ -76,20 +76,13 @@ docker run -p 8080:8080 skillswap
 
 ---
 
-## 👥 Pre-Seeded Demo Accounts
-SkillSwap automatically seeds **12 diverse students** on first startup with pre-configured overlapping barter cycles:
+## 👥 Real User Registration & Matching Flow
+SkillSwap starts completely fresh with zero pre-seeded accounts. Every student joins the network organically:
 
-| Student | Teaches | Wants to Learn | Demo Role |
-| :--- | :--- | :--- | :--- |
-| **Asha** | Guitar *(Adv)*, Python *(Int)* | Excel *(Beg)*, UI Design *(Beg)* | **3-Way Cycle** (with Ravi & Meena); 2-way with Carlos |
-| **Ravi** | Excel *(Adv)*, Data Analysis *(Int)* | Photography *(Beg)*, Spanish *(Beg)* | **3-Way Cycle** (teaches Asha, learns from Meena) |
-| **Meena** | Photography *(Adv)*, Spanish *(Int)*| Guitar *(Beg)*, Chess *(Beg)* | **3-Way Cycle** (teaches Ravi, learns from Asha) |
-| **Carlos**| UI Design *(Adv)*, Figma *(Int)* | Python *(Beg)* | **2-Way Direct Swap** with Asha |
-| **Diana** | French *(Adv)*, Writing *(Int)* | Data Analysis *(Beg)* | Multi-way swaps with Evan & Ravi |
-| **Evan**  | Chess *(Adv)*, Calculus *(Int)* | French *(Beg)* | Multi-way swaps with Diana & Meena |
-
-> 🔑 **Default Demo PIN for all accounts**: `1234`  
-> You can also use the **1-Click Quick Demo Login** buttons on the landing page!
+1. **Sign Up (`/signup`)**: Register your student name, secure 4-digit PIN, and campus contact details.
+2. **List Skills (`/profile`)**: Add skills you can teach (`BEGINNER`, `INTERMEDIATE`, `ADVANCED`) and skills you wish to learn.
+3. **Discover Exchanges (`/swaps`)**: The graph engine immediately computes all valid 2-way, 3-way, and 4-way barter cycles matching your profile.
+4. **Propose & Confirm (`/proposals`)**: Propose cycles, collect consensus, unlock contact details, and complete trades without spending a dime.
 
 ---
 

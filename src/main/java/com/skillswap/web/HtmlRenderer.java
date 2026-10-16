@@ -78,7 +78,6 @@ public class HtmlRenderer {
         if (currentUser == null) {
             sb.append("      <a href=\"/\" class=\"nav-link ").append("home".equals(activeNav) ? "active" : "").append("\">Home</a>\n");
             sb.append("      <a href=\"/#how\" class=\"nav-link\">How it works</a>\n");
-            sb.append("      <a href=\"/#try\" class=\"nav-link\">Try matcher</a>\n");
             sb.append("      <a href=\"/#why\" class=\"nav-link\">Why it's fair</a>\n");
             sb.append("      <a href=\"/members\" class=\"nav-link ").append("members".equals(activeNav) ? "active" : "").append("\">Community</a>\n");
         } else {
@@ -122,7 +121,7 @@ public class HtmlRenderer {
               <span style="color:#4A5B55;">· a money-free skill barter for students</span>
             </div>
             <div style="color:#4A5B55;font-size:14px;">
-              Pure Java OOP Engine · Direct & Cyclic Barter Discovery
+              Algorithmic Skill Barter Network · Direct & Cyclic Exchange
             </div>
           </div>
         </footer>
@@ -331,11 +330,12 @@ public class HtmlRenderer {
           border: 2px solid var(--color-ink);
           font-family: 'Bricolage Grotesque', sans-serif;
         }
-        .av-Asha { background: var(--color-lime); }
-        .av-Ravi { background: var(--color-lavender); }
-        .av-Meena { background: var(--color-coral); }
-        .av-Kabir { background: var(--color-sky); }
-        .av-Neha { background: var(--color-yellow); }
+        .av-c1 { background: var(--color-lime); }
+        .av-c2 { background: var(--color-lavender); }
+        .av-c3 { background: var(--color-coral); }
+        .av-c4 { background: var(--color-sky); }
+        .av-c5 { background: var(--color-yellow); }
+        .av-c6 { background: #B8F2D0; }
 
         /* Statuses */
         .st {
@@ -527,21 +527,21 @@ public class HtmlRenderer {
         sb.append("  <div style=\"flex: 1 1 420px; min-width: 0; display: flex; justify-content: center;\">\n");
         sb.append("    <div class=\"card\" style=\"width: 100%; max-width: 480px; padding: 28px; display: flex; flex-direction: column; gap: 20px; box-shadow: 10px 10px 0 #0D1F1A; transform: rotate(1.5deg);\">\n");
         sb.append("      <div style=\"display: flex; justify-content: space-between; align-items: center; gap: 12px;\">\n");
-        sb.append("        <h3 style=\"font-size: 22px; font-weight: 800;\">3-way swap found</h3>\n");
-        sb.append("        <span class=\"pill lm\">Everyone gets a match</span>\n");
+        sb.append("        <h3 style=\"font-size: 22px; font-weight: 800;\">3-way swap loop</h3>\n");
+        sb.append("        <span class=\"pill lm\">All learners matched</span>\n");
         sb.append("      </div>\n");
         sb.append("      <div style=\"display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.4;\">\n");
-        sb.append("        <span class=\"av av-Asha\">A</span><span><b>Asha</b> learns <span class=\"pill lm\">Excel</span> from <b>Ravi</b></span>\n");
+        sb.append("        <span class=\"av av-c1\">1</span><span><b>Peer 1</b> learns <span class=\"pill lm\">Excel</span> from <b>Peer 2</b></span>\n");
         sb.append("      </div>\n");
         sb.append("      <div style=\"display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.4;\">\n");
-        sb.append("        <span class=\"av av-Ravi\">R</span><span><b>Ravi</b> learns <span class=\"pill lm\">Photography</span> from <b>Meena</b></span>\n");
+        sb.append("        <span class=\"av av-c2\">2</span><span><b>Peer 2</b> learns <span class=\"pill lm\">Photography</span> from <b>Peer 3</b></span>\n");
         sb.append("      </div>\n");
         sb.append("      <div style=\"display: flex; align-items: center; gap: 12px; font-size: 16px; line-height: 1.4;\">\n");
-        sb.append("        <span class=\"av av-Meena\">M</span><span><b>Meena</b> learns <span class=\"pill lm\">Guitar</span> from <b>Asha</b></span>\n");
+        sb.append("        <span class=\"av av-c3\">3</span><span><b>Peer 3</b> learns <span class=\"pill lm\">Guitar</span> from <b>Peer 1</b></span>\n");
         sb.append("      </div>\n");
         sb.append("      <div style=\"display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 16px; border-top: 2px dashed #0D1F1A;\">\n");
-        sb.append("        <span style=\"font-size: 14px; color: #4A5B55;\">Status: <b>Mutual Consensus Pending</b></span>\n");
-        sb.append("        <a href=\"/login\" class=\"btn btn-ink btn-sm\">Test Flow</a>\n");
+        sb.append("        <span style=\"font-size: 14px; color: #4A5B55;\">Zero tuition · Direct barter</span>\n");
+        sb.append("        <a href=\"/signup\" class=\"btn btn-ink btn-sm\">Join to Swap</a>\n");
         sb.append("      </div>\n");
         sb.append("    </div>\n");
         sb.append("  </div>\n");
@@ -558,25 +558,22 @@ public class HtmlRenderer {
         sb.append("    <div class=\"card card-lift\" style=\"padding: 28px;\">\n");
         sb.append("      <div style=\"font-size: 2rem; margin-bottom: 12px;\">⚠️</div>\n");
         sb.append("      <h3 style=\"font-size: 20px; font-weight: 800; margin-bottom: 8px;\">1. Direct trade stalls</h3>\n");
-        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">Asha wants Excel and teaches Guitar. Ravi teaches Excel but wants Photography. Direct swap fails because Ravi doesn't need Guitar.</p>\n");
+        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">When Student A teaches Guitar and wants Excel, but Student B teaches Excel and wants Photography, a direct trade fails because Student B doesn't need Guitar.</p>\n");
         sb.append("    </div>\n");
 
         sb.append("    <div class=\"card card-lift\" style=\"padding: 28px;\">\n");
         sb.append("      <div style=\"font-size: 2rem; margin-bottom: 12px;\">🔄</div>\n");
         sb.append("      <h3 style=\"font-size: 20px; font-weight: 800; margin-bottom: 8px;\">2. Circle discovered</h3>\n");
-        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">SkillSwap's DFS cycle engine discovers Meena: she teaches Photography to Ravi and wants to learn Guitar from Asha. The circular loop is complete!</p>\n");
+        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">SkillSwap's graph engine discovers Student C: teaching Photography to Student B and wanting to learn Guitar from Student A. The circular loop is complete!</p>\n");
         sb.append("    </div>\n");
 
         sb.append("    <div class=\"card card-lift\" style=\"padding: 28px;\">\n");
         sb.append("      <div style=\"font-size: 2rem; margin-bottom: 12px;\">✨</div>\n");
         sb.append("      <h3 style=\"font-size: 20px; font-weight: 800; margin-bottom: 8px;\">3. Everyone learns</h3>\n");
-        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">All three students accept the proposal. Contacts are unlocked, study sessions are scheduled, and peer reviews rank future pairings.</p>\n");
+        sb.append("      <p style=\"font-size: 15px; color: #33463F;\">All participants accept the trade proposal. Contact info is unlocked, barter sessions are scheduled, and peer ratings build trust.</p>\n");
         sb.append("    </div>\n");
         sb.append("  </div>\n");
         sb.append("</section>\n");
-
-        // Interactive Live Matcher (#try)
-        sb.append(renderInteractiveMatcherSection());
 
         // Why It's Fair (#why)
         sb.append("<section id=\"why\" style=\"padding: 64px 0;\">\n");
@@ -613,7 +610,7 @@ public class HtmlRenderer {
         sb.append("<section style=\"padding: 32px 0 64px;\">\n");
         sb.append("  <div class=\"card\" style=\"background: var(--color-lime); padding: 56px 32px; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; box-shadow: 8px 8px 0 #0D1F1A;\">\n");
         sb.append("    <h2 style=\"font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 800; max-width: 680px;\">Your next skill is one swap away.</h2>\n");
-        sb.append("    <p style=\"max-width: 500px; font-size: 17px; color: #1D3329;\">Join over a dozen college students trading coding, music, design, and languages without spending a dime.</p>\n");
+        sb.append("    <p style=\"max-width: 500px; font-size: 17px; color: #1D3329;\">Trade coding, music, design, academics, and languages with fellow students without spending a dime.</p>\n");
         sb.append("    <a href=\"/signup\" class=\"btn btn-ink btn-lg\">Create Your Profile</a>\n");
         sb.append("  </div>\n");
         sb.append("</section>\n");
@@ -622,49 +619,10 @@ public class HtmlRenderer {
     }
 
     private static String renderInteractiveMatcherSection() {
-        return """
-        <section id="try" style="margin: 40px 0; padding: 48px 32px; background: #0D1F1A; color: #fff; border-radius: 28px; box-sizing: border-box; display: flex; flex-direction: column; gap: 32px;">
-          <div>
-            <span class="pill lm" style="margin-bottom: 12px; display: inline-flex;">Interactive Matcher Sandbox</span>
-            <h2 style="font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; color: #fff;">See live cyclic swaps for any student.</h2>
-            <p style="color: #B9C8BF; max-width: 600px; margin-top: 8px; font-size: 16px;">
-              Pick a student to inspect their taught and desired skills, and discover how our DFS engine discovers circular barter trades.
-            </p>
-          </div>
+        return "";
+    }
+/*
 
-          <!-- Student Tab Bar -->
-          <div class="tab-bar" id="studentTabs">
-            <button class="tab on" onclick="selectStudent('Asha')">Asha</button>
-            <button class="tab" onclick="selectStudent('Ravi')">Ravi</button>
-            <button class="tab" onclick="selectStudent('Meena')">Meena</button>
-            <button class="tab" onclick="selectStudent('Kabir')">Kabir</button>
-            <button class="tab" onclick="selectStudent('Neha')">Neha</button>
-          </div>
-
-          <!-- Student Skill Overview Panel -->
-          <div style="background: rgba(255,255,255,0.06); border: 1px solid #3b5148; border-radius: 20px; padding: 24px; display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; align-items: center;">
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <span style="font-size:13px; font-weight:700; color:#CDF23A;">CAN TEACH</span>
-              <div id="teachSkills" style="display:flex; flex-wrap:wrap; gap:8px;">
-                <span class="pill lm">Guitar</span><span class="pill lm">Figma</span>
-              </div>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px;">
-              <span style="font-size:13px; font-weight:700; color:#C9B8FF;">WANTS TO LEARN</span>
-              <div id="wantSkills" style="display:flex; flex-wrap:wrap; gap:8px;">
-                <span class="pill" style="background:#fff; color:#0D1F1A;">Excel</span><span class="pill" style="background:#fff; color:#0D1F1A;">Python</span>
-              </div>
-            </div>
-            <div>
-              <a id="loginStudentBtn" href="/login" class="btn btn-lime btn-sm">Log in as Asha</a>
-            </div>
-          </div>
-
-          <!-- Discovered Barter Cycles for Chosen Student -->
-          <div id="cycleContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
-            <!-- Rendered via JS below -->
-          </div>
-        </section>
 
         <script>
         const studentData = {
@@ -842,11 +800,8 @@ public class HtmlRenderer {
           }).join('');
         }
 
-        // Initialize on Asha
-        selectStudent('Asha');
-        </script>
-        """;
-    }
+        */
+
 
     // =========================================================================
     // Page: Sign Up & Log In
@@ -907,7 +862,7 @@ public class HtmlRenderer {
             <form action="/login" method="POST">
               <div class="form-group">
                 <label class="form-label" for="name">Student Name</label>
-                <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Asha" required autofocus>
+                <input type="text" id="name" name="name" class="form-control" placeholder="Enter your name" required autofocus>
               </div>
 
               <div class="form-group">
@@ -1193,7 +1148,7 @@ public class HtmlRenderer {
         sb.append("    <form action=\"/review\" method=\"POST\" style=\"display: flex; flex-direction: column; gap: 12px;\">\n");
         sb.append("      <div class=\"form-group\" style=\"margin-bottom:0;\">\n");
         sb.append("        <label class=\"form-label\" for=\"teacherName\">Teacher Name</label>\n");
-        sb.append("        <input type=\"text\" id=\"teacherName\" name=\"teacherName\" class=\"form-control\" placeholder=\"e.g. Ravi or Meena\" required>\n");
+        sb.append("        <input type=\"text\" id=\"teacherName\" name=\"teacherName\" class=\"form-control\" placeholder=\"Enter peer name\" required>\n");
         sb.append("      </div>\n");
 
         sb.append("      <div style=\"display: flex; align-items: center; justify-content: space-between;\">\n");
@@ -1468,6 +1423,22 @@ public class HtmlRenderer {
         }
         sb.append("</div>\n");
 
+        if (members.isEmpty()) {
+            sb.append("<div class=\"card\" style=\"text-align: center; padding: 64px 32px; max-width: 640px; margin: 40px auto; display: flex; flex-direction: column; align-items: center; gap: 16px; box-shadow: 8px 8px 0 #0D1F1A;\">\n");
+            sb.append("  <div style=\"font-size: 3.5rem;\">🌱</div>\n");
+            sb.append("  <h2 style=\"font-size: 26px; font-weight: 800;\">No community members yet</h2>\n");
+            sb.append("  <p style=\"color: #4A5B55; font-size: 16px; max-width: 460px; line-height: 1.5;\">\n");
+            sb.append("    The member directory is completely fresh. Create an account, list what you can teach and what you want to learn, and be the first to start swapping!\n");
+            sb.append("  </p>\n");
+            if (currentUser == null) {
+                sb.append("  <a href=\"/signup\" class=\"btn btn-lime btn-lg\">Join Community</a>\n");
+            } else {
+                sb.append("  <a href=\"/profile\" class=\"btn btn-lime btn-lg\">Add Skills in Profile</a>\n");
+            }
+            sb.append("</div>\n");
+            return sb.toString();
+        }
+
         sb.append("<div class=\"grid-3\">\n");
         for (Member m : members) {
             boolean isMe = currentUser != null && m.equals(currentUser);
@@ -1538,13 +1509,9 @@ public class HtmlRenderer {
     }
 
     private static String getAvatarClass(String name) {
-        if (name == null) return "av-Asha";
-        String n = name.trim().toLowerCase();
-        if (n.startsWith("asha")) return "av-Asha";
-        if (n.startsWith("ravi")) return "av-Ravi";
-        if (n.startsWith("meena")) return "av-Meena";
-        if (n.startsWith("kabir")) return "av-Kabir";
-        if (n.startsWith("neha")) return "av-Neha";
-        return "av-Asha";
+        if (name == null || name.trim().isEmpty()) return "av-c1";
+        int hash = Math.abs(name.trim().hashCode());
+        String[] classes = {"av-c1", "av-c2", "av-c3", "av-c4", "av-c5", "av-c6"};
+        return classes[hash % classes.length];
     }
 }
