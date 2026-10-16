@@ -19,12 +19,15 @@ RUN chmod +x build.sh && ./build.sh
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /app
 
-# Non-root user for security best practices
-RUN addgroup --system skillswap && adduser --system --ingroup skillswap skillswap
-USER skillswap
+# Non-root user and persistent storage directory setup
+RUN addgroup --system skillswap && adduser --system --ingroup skillswap skillswap \
+    && mkdir -p /app/data \
+    && chown -R skillswap:skillswap /app
 
 # Copy compiled standalone executable JAR from builder
-COPY --from=builder /workspace/target/skillswap.jar /app/skillswap.jar
+COPY --chown=skillswap:skillswap --from=builder /workspace/target/skillswap.jar /app/skillswap.jar
+
+USER skillswap
 
 # Data directory for file persistence (can be mounted as volume)
 VOLUME /app/data

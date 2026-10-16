@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: skillswap
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: 8080
